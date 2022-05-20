@@ -58,6 +58,11 @@ def test():
     abort(500, description=e)
 
 
+@app.errorhandler(404)
+def not_found(e):
+  return app.send_static_file('index.html')
+
+
 @socketio.on('message')
 def handleMessage(msg):
   send(msg, broadcast=True)
