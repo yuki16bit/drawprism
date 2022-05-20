@@ -5,7 +5,6 @@ const RoomSetupPage = () => {
   return (
     <div>
       Room Setup Page
-      <Link to='/room'>Room Page</Link>
     </div>
   );
 }

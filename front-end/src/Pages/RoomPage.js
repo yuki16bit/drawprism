@@ -23,7 +23,7 @@ const RoomPage = () => {
     <div>
       <h1>Room Page</h1>
       <div>
-        {messages?.length > 0 && messages.map(msg => <p>{msg}</p>)}
+        {messages?.length > 0 && messages.map((msg, i) => <p key={i}>{msg}</p>)}
       </div>
       <input value={message} name='message' onChange={(e) => setMessage(e.target.value)}></input>
       <button onClick={(e) => {
@@ -34,7 +34,6 @@ const RoomPage = () => {
           alert('Please Add A Message')
         }
       }}>Send Message</button>
-      <Link to='/'>Home Page</Link>
     </div>
   );
 }
