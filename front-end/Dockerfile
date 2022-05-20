@@ -3,6 +3,7 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 ADD . /app
 RUN npm install
+ENV REACT_APP_ENV production
 RUN npm run build
 
 FROM nginx
