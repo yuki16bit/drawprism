@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { io } from 'socket.io-client'
 
-const socket = io('http://localhost:8000')
+const endPoint = process.env.REACT_ENV !== 'production' ? 'http://localhost:8000' : 'https://drawprism.space'
+const socket = io(`${endPoint}`)
 
 const RoomPage = () => {
   const [messages, setMessages] = useState(["Hello SocketIO !"])
