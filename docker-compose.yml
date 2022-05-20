@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+
+  backend:
+    build: ./backend
+    container_name: server-side
+    expose:
+      - 8000
+  
+  front-end:
+    build: ./front-end
+    container_name: client-side
+    ports:
+      - 3000:3000
