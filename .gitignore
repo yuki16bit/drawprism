@@ -9,6 +9,8 @@ coverage/
 # production
 build/
 __pycache__/
+drawprism-cert-chain.crt
+drawprism-private.key
 
 # misc
 .DS_Store

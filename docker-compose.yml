@@ -4,12 +4,17 @@ services:
 
   backend:
     build: ./backend
+    image: kyo144/drawprism-server-side
     container_name: server-side
     expose:
       - 8000
   
   front-end:
     build: ./front-end
+    image: kyo144/drawprism-client-side
     container_name: client-side
+    expose:
+      - 80
     ports:
-      - 3000:3000
+      - 80:80
+      - 443:443

@@ -7,4 +7,7 @@ RUN npm run build
 
 FROM nginx
 COPY --from=build-step /app/build /usr/share/nginx/html
-COPY ../nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/drawprism-cert-chain.crt /etc/nginx/certs/
+COPY ./nginx/drawprism-private.key /etc/nginx/certs/
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+CMD ["nginx", "-g", "daemon off;"]
