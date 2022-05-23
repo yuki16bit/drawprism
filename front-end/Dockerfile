@@ -4,6 +4,8 @@ ENV PATH /app/node_modules/.bin:$PATH
 ADD . /app
 RUN npm install
 ENV REACT_APP_ENV production
+ENV REACT_APP_DEV_ENDPOINT http://localhost:8000
+ENV REACT_APP_PROD_ENDPOINT https://drawprism.space
 RUN npm run build
 
 FROM nginx

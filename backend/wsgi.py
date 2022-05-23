@@ -80,6 +80,6 @@ def handleMessage(msg):
   send(msg, broadcast=True)
 
 
-@socket_io.on('draw')
+@socket_io.on('drawing')
 def handleDraw(data):
-  emit('show', data)
+  emit('drawing', data, broadcast=True)
