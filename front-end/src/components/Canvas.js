@@ -8,12 +8,14 @@ const Canvas = ({ selectedColor = '#0C40BE' }) => {
   const [drawing, setDrawing] = useState(false);
   const [x, setX] = useState();
   const [y, setY] = useState();
+  const [canvasRect, setCanvasRect] = useState();
 
   useEffect(() => {
     if (canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
       context.current.fillStyle = '#ffffff'; //HERE, use HEX format in 6 digits
       context.current.fillRect(0, 0, 720, 480); //HERE
+      setCanvasRect(canvasRef.current.getBoundingClientRect());
     }
   }, []);
 
@@ -41,17 +43,24 @@ const Canvas = ({ selectedColor = '#0C40BE' }) => {
 
   const mouseDown = (e) => {
     setDrawing(true);
-    setX(e.clientX || e.touches[0].clientX);
-    setY(e.clientY || e.touches[0].clientY);
+    setX(e.clientX - canvasRect.left || e.touches[0].clientX - canvasRect.left);
+    setY(e.clientY - canvasRect.top || e.touches[0].clientY - canvasRect.top);
   };
 
   const mouseMove = (e) => {
     if (!drawing) {
       return;
     }
-    drawLine(x, y, e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, selectedColor, true);
-    setX(e.clientX || e.touches[0].clientX);
-    setY(e.clientY || e.touches[0].clientY);
+    drawLine(
+      x,
+      y,
+      e.clientX - canvasRect.left || e.touches[0].clientX - canvasRect.left,
+      e.clientY - canvasRect.top || e.touches[0].clientY - canvasRect.top,
+      selectedColor,
+      true
+    );
+    setX(e.clientX - canvasRect.left || e.touches[0].clientX - canvasRect.left);
+    setY(e.clientY - canvasRect.top || e.touches[0].clientY - canvasRect.top);
   };
 
   const mouseUp = (e) => {
@@ -59,7 +68,14 @@ const Canvas = ({ selectedColor = '#0C40BE' }) => {
       return;
     }
     setDrawing(false);
-    drawLine(x, y, e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, selectedColor, true);
+    drawLine(
+      x,
+      y,
+      e.clientX - canvasRect.left || e.touches[0].clientX - canvasRect.left,
+      e.clientY - canvasRect.top || e.touches[0].clientY - canvasRect.top,
+      selectedColor,
+      true
+    );
   };
 
   const drawLine = (x0, y0, x1, y1, selectedColor, emit) => {
