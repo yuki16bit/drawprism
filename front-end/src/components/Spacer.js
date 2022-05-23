@@ -1,11 +1,6 @@
 import React from 'react';
 
-const Spacer = ({
-  width,
-  height,
-  minWidth,
-  minHeight,
-}) => {
+const Spacer = ({ width, height, minWidth, minHeight }) => {
   return <div className={`${width} ${height} ${minWidth} ${minHeight}`}></div>;
 };
 

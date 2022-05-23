@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './redux-toolkit/store';
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Home from './Pages/HomePage';
 import RoomPage from './Pages/RoomPage';
 import RoomSetupPage from './Pages/RoomSetupPage';
@@ -21,8 +21,13 @@ const Layout = () => {
             <Link to='/'>Home</Link>
           </h1>
           <ul className='h-[4.75rem] w-fit flex gap-6 mx-auto items-center'>
-            <li className='mt-4'><Link to='/room'>開發用: Room Page</Link></li>
-            <li className='mt-4'><Link to='/room'>開發用: Member Page</Link></li>
+            <li className='mt-4'>NavBar 預定地</li>
+            <li className='mt-4'>
+              <Link to='/room'>開發用: Room Page</Link>
+            </li>
+            <li className='mt-4'>
+              <Link to='/member'>開發用: Member Page</Link>
+            </li>
           </ul>
         </Container>
       </nav>
@@ -44,8 +49,8 @@ const Layout = () => {
         <div className='mx-auto relative w-full h-[990px] bg-no-repeat bg-top lg:bg-[center_10px] bg-image-circle bg-contain'></div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 root.render(
   <React.StrictMode>
@@ -56,4 +61,3 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
-

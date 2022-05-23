@@ -2,17 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
-  const [data, setData] = useState([])
-  const fetchData = async () => {
-    const res = await fetch('/api/test');
-    const test = await res.json();
-    setData(test.data);
-  };
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchData()
-    console.log('YOOO!')
-  }, [])
+    console.log('YOOO!');
+  }, []);
 
   return (
     <div>
@@ -26,28 +20,28 @@ const HomePage = () => {
         </div>
       </header>
       <div className='mt-[160px] mb-[80px]'>
-        <h1 className='text-center text-3xl font-bold text-netural-800 mt-2'>Drawing and Chatting with your friends!</h1>
-        <h2 className='text-center text-2xl font-medium text-netural-800 mt-6'>Create a free drawing chat in a second!</h2>
-        <h2 className='text-center text-2xl font-medium text-netural-800 mt-2'>There is no need to register. Anonymously.</h2>
-        <h2 className='text-center text-2xl font-medium text-netural-800 mt-2'>Works only with a browser. No need Flash and JavaVM.</h2>
+        <h1 className='text-center text-3xl font-bold text-netural-800 mt-2'>
+          Drawing and Chatting with your friends!
+        </h1>
+        <h2 className='text-center text-2xl font-medium text-netural-800 mt-6'>
+          Create a free drawing chat in a second!
+        </h2>
+        <h2 className='text-center text-2xl font-medium text-netural-800 mt-2'>
+          There is no need to register. Anonymously.
+        </h2>
+        <h2 className='text-center text-2xl font-medium text-netural-800 mt-2'>
+          Works only with a browser. No need Flash and JavaVM.
+        </h2>
       </div>
-      <h1 className='text-center text-3xl font-bold'>
-        Rooms
-      </h1>
+      <h1 className='text-center text-3xl font-bold'>Rooms</h1>
       <p className='text-xl font-bold'>RDS 連線測試</p>
-      <div>{
-        data?.length > 0
-          ? data.map(({ content, img_url }, i) =>
-            <div key={i}>
-              {content}
-            </div>
-          )
-          : <div>Loading...</div>
-      }</div>
-      
+      <div>
+        {data?.length > 0 ? data.map(({ content, img_url }, i) => <div key={i}>{content}</div>) : <div>Loading...</div>}
+      </div>
+
       <Link to='/room-setup'>Room Setup Page</Link>
     </div>
   );
-}
+};
 
 export default HomePage;
