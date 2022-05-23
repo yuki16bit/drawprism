@@ -1,9 +1,13 @@
-import os
-import boto3
-from mysql.connector import Error, pooling
+from controllers.member import bp_c_member
+from utils.with_cnx import with_cnx
+from flask import Flask, abort, current_app, jsonify, session, request
 from flask_socketio import SocketIO, send, emit
-from flask import Flask, current_app, jsonify
-from wrappers.with_cnx import with_cnx
+from mysql.connector import Error, pooling
+import os
+import shortuuid
+import boto3
+import eventlet
+eventlet.monkey_patch(socket=True)
 
 
 def create_rds_pool():
@@ -27,13 +31,12 @@ def rds_cnx():
     print('RDS Connection error: ', e)
 
 
-app = Flask(__name__, static_folder='../client/build', static_url_path='/')
+app = Flask(__name__, static_folder='../front-end/build', static_url_path='/')
 with app.app_context():
   current_app.db_pool = create_rds_pool()
   current_app.rds_cnx = rds_cnx
 
-
-socketio = SocketIO(app, cors_allowed_origins='*', logger=True)
+app.secret_key = os.getenv('JWT_SECRET_KEY')
 
 
 @app.route('/')
@@ -41,28 +44,42 @@ def index():
   return app.send_static_file('index.html')
 
 
-@with_cnx(need_commit=False)
-def query_messages(cursor):
-  cursor.execute('SELECT content, image_url FROM messages')
-  columns = [column[0] for column in cursor.description]
-  output = [dict(zip(columns, row)) for row in cursor.fetchall()]
-  return output
-
-
-@app.route('/api/test', methods=['GET'])
-def test():
-  try:
-    result = query_messages()
-    return jsonify({'data': result if result else []})
-  except Exception as e:
-    abort(500, description=e)
-
-
 @app.errorhandler(404)
 def not_found(e):
   return app.send_static_file('index.html')
 
 
-@socketio.on('message')
+@app.errorhandler(500)
+def not_found(e):
+  return app.send_static_file('index.html')
+
+
+app.register_blueprint(bp_c_member, url_prefix='/api')
+
+
+socket_io = SocketIO(app, cors_allowed_origins='*',
+                     async_mode='eventlet',
+                     logger=True)
+
+
+@socket_io.on('connect')
+def socket_connect():
+  print('あおおああおあおいうふぃｆｊごｗじおｗｊ！')
+  new_member_name = 'Guest-' + shortuuid.uuid()[:4]
+  session.permanent = True
+  session['member_name'] = new_member_name
+
+
+@socket_io.on('member')
+def socket_member():
+  send(session['member_name'], broadcast=True)
+
+
+@socket_io.on('message')
 def handleMessage(msg):
   send(msg, broadcast=True)
+
+
+@socket_io.on('draw')
+def handleDraw(data):
+  emit('show', data)
