@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './redux-toolkit/store';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { SocketContext, socket } from './context/socketIo';
 import Home from './Pages/HomePage';
 import RoomPage from './Pages/RoomPage';
 import RoomSetupPage from './Pages/RoomSetupPage';
@@ -53,11 +54,11 @@ const Layout = () => {
 };
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <SocketContext.Provider value={socket}>
         <Layout />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+      </SocketContext.Provider>
+    </BrowserRouter>
+  </Provider>
 );

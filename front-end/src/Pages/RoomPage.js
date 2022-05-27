@@ -1,25 +1,18 @@
-import React, { useState, useEffect, createContext } from 'react';
-import { io } from 'socket.io-client';
+import { useState, useEffect, useContext } from 'react';
+import { SocketContext } from '../context/socketIo';
 import Board from '../components/Board';
 
-const endPoint =
-  process.env.REACT_APP_ENV !== 'production'
-    ? `${process.env.REACT_APP_DEV_ENDPOINT}`
-    : `${process.env.REACT_APP_PROD_ENDPOINT}`;
-const socket = io(`${endPoint}`);
-export const SocketContext = createContext();
-
 const RoomPage = () => {
+  const socket = useContext(SocketContext);
   const [members, setMembers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (socket.connected) {
-      socket.emit('member');
-    }
+    console.log('socket', socket);
+    socket.emit('member');
     return () => socket.disconnect();
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     const getMembers = () => {
@@ -32,11 +25,9 @@ const RoomPage = () => {
         setMessages([...messages, msg]);
       });
     };
-    if (socket.connected) {
-      getMembers();
-      getMessages();
-    }
-  }, [members, messages]);
+    getMembers();
+    getMessages();
+  }, [members, messages, socket]);
 
   return (
     <div>
@@ -60,9 +51,7 @@ const RoomPage = () => {
         傳訊息
       </button>
       <h3>畫畫區</h3>
-      <SocketContext.Provider value={socket}>
-        <Board />
-      </SocketContext.Provider>
+      <Board />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
-import { SocketContext } from '../Pages/RoomPage';
+import { SocketContext } from '../context/socketIo';
 
 const Canvas = ({ selectedColor = '#0C40BE' }) => {
   const socket = useContext(SocketContext);
