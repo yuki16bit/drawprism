@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    image: kyo144/drawprism-server-dev
+    container_name: server-dev
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+  
+  front-end:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile.dev
+    image: kyo144/drawprism-client-dev
+    container_name: client-dev
+    ports:
+      - 80:80
