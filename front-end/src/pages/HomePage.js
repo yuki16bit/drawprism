@@ -31,8 +31,12 @@ const HomePage = () => {
       {/* Slogan Section */}
       <section id='section-slogan' className='mt-40 mb-20'>
         <h1 className='text-center text-4xl font-bold'>Drawing and Chatting with friends!</h1>
-        <h3 className='mt-6 text-center text-xl font-medium'>Create a free drawing chat in a second ✨</h3>
-        <h3 className='mt-2 text-center text-xl font-medium'>Anonymously, but still can sign up if you'd like to.</h3>
+        <h3 className='mt-6 text-center text-xl font-medium'>
+          Create a free drawing chat in a second ✨
+        </h3>
+        <h3 className='mt-2 text-center text-xl font-medium'>
+          Anonymously, but still can sign up if you'd like to.
+        </h3>
         <h3 className='mt-2 text-center text-xl font-medium'>
           Works only with a browser. No need Flash Player or JavaVM.
         </h3>
@@ -46,7 +50,9 @@ const HomePage = () => {
               <RoomThumbnail
                 key={activeRoom.roomID}
                 className={`${
-                  activeRooms.length > 3 && activeRooms.length - 1 === index ? 'mr-auto lg:mr-auto' : null
+                  activeRooms.length > 3 && activeRooms.length - 1 === index
+                    ? 'mr-auto lg:mr-auto'
+                    : null
                 } relative mx-2 aspect-[1.414/1] basis-full cursor-pointer overflow-hidden rounded border border-amber-500 bg-white sm:basis-[calc(50%-1rem)] lg:mx-5 lg:basis-[calc(33.3%-2.5rem)]`}
                 roomIndex={index}
                 roomName={activeRoom.roomName}
@@ -75,7 +81,9 @@ const HomePage = () => {
               <RoomThumbnail
                 key={historyRoom.roomID}
                 className={`${
-                  historyRooms.length > 3 && historyRooms.length - 1 === index ? 'mr-auto lg:mr-auto' : null
+                  historyRooms.length > 3 && historyRooms.length - 1 === index
+                    ? 'mr-auto lg:mr-auto'
+                    : null
                 } relative mx-2 aspect-[1.414/1] basis-full cursor-pointer overflow-hidden rounded border border-amber-500 bg-white sm:basis-[calc(50%-1rem)] lg:mx-5 lg:basis-[calc(33.3%-2.5rem)]`}
                 roomIndex={index}
                 roomName={historyRoom.roomName}

@@ -18,20 +18,22 @@ const root = createRoot(rootContainer);
 
 const Layout = () => {
   return (
-    <div className={`flex flex-col min-h-screen relative font-global text-base bg-repeat-x bg-[#f3f3f3]`}>
+    <div
+      className={`relative flex min-h-screen flex-col bg-[#f3f3f3] bg-repeat-x font-global text-base`}
+    >
       {/* NavBar */}
-      <nav className='bg-gradient-to-b from-neutral-50 fixed top-0 right-0 left-0 z-10'>
+      <nav className='fixed top-0 right-0 left-0 z-10 bg-gradient-to-b from-neutral-50'>
         <h2 className='fixed top-[25px] left-[32px] z-20 text-2xl font-medium '>
           <Link to='/'>Home</Link>
         </h2>
-        <ul className='h-[4.75rem] w-fit flex gap-12 ml-auto mr-[25px] items-center'>
-          <li className='mt-4 text-neutral-600 font-medium tracking-wide px-2 py-1 rounded'>
+        <ul className='ml-auto mr-[25px] flex h-[4.75rem] w-fit items-center gap-12'>
+          <li className='mt-4 rounded px-2 py-1 font-medium tracking-wide text-neutral-600'>
             <span>Active Room : 0</span>
           </li>
           {/* <li className='mt-4 text-neutral-600 font-medium tracking-wide'>
             <Link to='/room'>開發用: Room Page</Link>
           </li> */}
-          <li className='mt-4 text-neutral-600 font-medium tracking-wide'>
+          <li className='mt-4 font-medium tracking-wide text-neutral-600'>
             <Link to='/sign?type=up'>
               <span className='underline'>Sign up</span>
             </Link>
@@ -43,7 +45,7 @@ const Layout = () => {
         </ul>
       </nav>
       {/* Main */}
-      <main className='grow z-[1]'>
+      <main className='z-[1] grow'>
         <Spacer width='w-[76px]' height='h-[76px]' minWidth='min-w-full' minHeight='min-h-full' />
         <Container>
           <Routes>
@@ -57,13 +59,16 @@ const Layout = () => {
       {/* Footer */}
       <footer className='z-[1] mb-10'>
         <Container>
-          <h1 className='text-center text-4xl font-bold mb-8'>Contact</h1>
-          <div className='w-40 h-40 rounded-full mx-auto'>
-            <img alt='avatar-kyo' src={`${process.env.PUBLIC_URL + '/images/avatar-kyo.png'}`}></img>
+          <h1 className='mb-8 text-center text-4xl font-bold'>Contact</h1>
+          <div className='mx-auto h-40 w-40 rounded-full'>
+            <img
+              alt='avatar-kyo'
+              src={`${process.env.PUBLIC_URL + '/images/avatar-kyo.png'}`}
+            ></img>
           </div>
-          <h2 className='text-center text-2xl font-medium my-3'>Kyo</h2>
-          <h5 className='text-center font-mediu  m'>Web Developer who built this website.</h5>
-          <ul className='flex gap-16 justify-center items-center my-10'>
+          <h2 className='my-3 text-center text-2xl font-medium'>Kyo</h2>
+          <h5 className='font-mediu m  text-center'>Web Developer who built this website.</h5>
+          <ul className='my-10 flex items-center justify-center gap-16'>
             <li className='rounded-full bg-stone-800 p-2'>
               <FiLinkedin size='1.5rem' className='stroke-[1.5] text-white' />
             </li>
@@ -82,8 +87,8 @@ const Layout = () => {
         </Container>
       </footer>
       {/* Background Big Circle */}
-      <div className='w-full fixed top-[300px] lg:top-[310px] z-0'>
-        <div className='mx-auto relative w-full h-[990px] bg-no-repeat bg-top lg:bg-[center_10px] bg-image-circle bg-contain'></div>
+      <div className='fixed top-[300px] z-0 w-full lg:top-[310px]'>
+        <div className='relative mx-auto h-[990px] w-full bg-image-circle bg-contain bg-top bg-no-repeat lg:bg-[center_10px]'></div>
       </div>
     </div>
   );

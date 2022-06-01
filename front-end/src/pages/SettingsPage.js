@@ -110,7 +110,9 @@ const SettingsPage = () => {
           </dd>
           <dt className='font-medium'>Room's Chat Logs</dt>
           <dd className='mb-8 text-lg font-bold'>
-            <div className='my-2 text-sm'>Press the button below to see chat logs of this room.</div>
+            <div className='my-2 text-sm'>
+              Press the button below to see chat logs of this room.
+            </div>
             <button className='block rounded bg-amber-500 px-2 py-1 text-white transition hover:bg-amber-600'>
               Request Chat Logs
             </button>
@@ -118,7 +120,9 @@ const SettingsPage = () => {
           </dd>
           <dt className='font-medium'>Room Deletion</dt>
           <dd className='mb-8 text-lg font-bold'>
-            <div className='my-2 text-sm text-red-600'>All records will be removed! Can't recover.</div>
+            <div className='my-2 text-sm text-red-600'>
+              All records will be removed! Can't recover.
+            </div>
             <button className='block rounded bg-amber-500 px-2 py-1 text-white transition hover:bg-amber-600'>
               Delete the Room
             </button>
