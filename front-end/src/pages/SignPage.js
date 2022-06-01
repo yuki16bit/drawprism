@@ -12,7 +12,6 @@ const SignPage = () => {
 
   return (
     <>
-      {console.log('queryString.get', queryString.get('type'))}
       <h1 className='text-center text-4xl font-bold mt-8 mb-16'>
         {signType === 'up' && 'Sign up'}
         {signType === 'in' && 'Sign in'}
@@ -31,7 +30,7 @@ const SignPage = () => {
             <div className='mb-6'>
               <input
                 type='text'
-                className='form-control block w-full px-4 py-2 text-xl bg-white bg-clip-padding border border-stone-300 rounded transition ease-in-out m-0 focus:border-stone-400 focus:outline-none'
+                className='form-control block w-full px-4 py-2 border border-stone-300 rounded transition ease-in-out m-0 focus:border-stone-400 focus:outline-none'
                 placeholder='Name'
               />
             </div>
@@ -39,18 +38,18 @@ const SignPage = () => {
           <div className='mb-6'>
             <input
               type='text'
-              className='form-control block w-full px-4 py-2 text-xl bg-white bg-clip-padding border border-stone-300 rounded transition ease-in-out m-0 focus:border-stone-400 focus:outline-none'
+              className='form-control block w-full px-4 py-2 border border-stone-300 rounded transition ease-in-out m-0 focus:border-stone-400 focus:outline-none'
               placeholder='Email'
             />
           </div>
           <div className='mb-6'>
             <input
               type='password'
-              className='form-control block w-full px-4 py-2 text-xl bg-white bg-clip-padding border border-stone-300 rounded transition ease-in-out m-0 focus:border-stone-400 focus:outline-none'
+              className='form-control block w-full px-4 py-2 border border-stone-300 rounded transition ease-in-out m-0 focus:border-stone-400 focus:outline-none'
               placeholder='Password'
             />
           </div>
-          <button className='block w-full rounded bg-amber-500 text-white py-2 hover:bg-amber-500/90 transition'>
+          <button className='block w-full rounded bg-amber-500 text-white py-2 hover:bg-amber-600 transition'>
             {signType === 'up' && 'Sign up'}
             {signType === 'in' && 'Sign in'}
           </button>
@@ -60,7 +59,7 @@ const SignPage = () => {
           <span className='flex-shrink mx-4 font-medium'>OR</span>
           <div className='flex-grow border-t border-stone-300'></div>
         </div>
-        <button className='flex justify-center items-center gap-2 block w-full rounded bg-sky-500 text-white py-2 mb-6 hover:bg-sky-500/90 transition'>
+        <button className='flex justify-center items-center gap-2 block w-full rounded bg-sky-500 text-white py-2 mb-6 hover:bg-sky-600/80 transition'>
           <FiTwitter />
           Continue with Twitter
         </button>
