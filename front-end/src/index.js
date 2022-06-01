@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { CookieContext, cookies } from './context/universalCookie.js';
 import './index.css';
 import Home from './pages/HomePage';
+import SignPage from './pages/SignPage';
 import RoomPage from './pages/RoomPage';
 import SettingsPage from './pages/SettingsPage';
 import Container from './components/Container';
@@ -31,7 +32,13 @@ const Layout = () => {
             <Link to='/room'>開發用: Room Page</Link>
           </li> */}
           <li className='mt-4 text-neutral-600 font-medium tracking-wide'>
-            <Link to='/member'>Sign up / Sign in</Link>
+            <Link to='/sign?type=up'>
+              <span className='underline'>Sign up</span>
+            </Link>
+            　/　
+            <Link to='/sign?type=in'>
+              <span className='underline'>Sign in</span>
+            </Link>
           </li>
         </ul>
       </nav>
@@ -41,8 +48,9 @@ const Layout = () => {
         <Container>
           <Routes>
             <Route path='/' element={<Home />} />
+            <Route path='/sign' element={<SignPage />} />
+            <Route path='/settings' element={<SettingsPage />} />
             <Route path='/room' element={<RoomPage />} />
-            <Route path='/setup-room' element={<SettingsPage />} />
           </Routes>
         </Container>
       </main>
