@@ -10,15 +10,13 @@ export const socketSlice = createSlice({
   },
   reducers: {
     startConnecting: (state) => {
-      state.isEstablishingConnection = true;
+      return { ...state, isEstablishingConnection: true };
     },
     connectionEstablished: (state) => {
-      state.isConnected = true;
-      state.isEstablishingConnection = true;
+      return { ...state, isConnected: true, isEstablishingConnection: true };
     },
     anonymousSignin: (state, action) => {
-      console.log('socket slice user', action.payload);
-      state.user = action.payload;
+      return { ...state, user: action.payload };
     },
     sendChat: (state) => {
       console.log('send chat');
