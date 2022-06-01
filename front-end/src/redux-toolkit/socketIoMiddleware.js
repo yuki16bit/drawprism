@@ -34,7 +34,6 @@ const socketIoMiddleware = (store) => {
         socket.emit('authentication', cookies.get('jwt'));
       });
       socket.on('anonymous-signin', (user) => {
-        console.log('socket mid signin', socket.rooms);
         store.dispatch(socketActions.anonymousSignin(user));
       });
       socket.on('anonymous-signup', (jwt) => {
