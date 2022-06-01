@@ -1,8 +1,8 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
-import { SocketContext } from '../context/socketIo';
+import { useRef, useEffect, useState, useContext } from 'react';
+// import { SocketContext } from '../context/socketIo';
 
-const Canvas = ({ selectedColor = '#0C40BE' }) => {
-  const socket = useContext(SocketContext);
+const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
+  // const socket = useContext(SocketContext);
   const canvasRef = useRef(null);
   const context = useRef(null);
   const [drawing, setDrawing] = useState(false);
@@ -19,9 +19,9 @@ const Canvas = ({ selectedColor = '#0C40BE' }) => {
     }
   }, []);
 
-  useEffect(() => {
-    socket.on('drawing', onDrawingEvent);
-  }, [socket]);
+  // useEffect(() => {
+  //   socket.on('drawing', onDrawingEvent);
+  // }, [socket]);
 
   const throttle = (callback, delay) => {
     let previousCall = new Date().getTime();
@@ -93,21 +93,21 @@ const Canvas = ({ selectedColor = '#0C40BE' }) => {
     const w = canvasRef.current.width;
     const h = canvasRef.current.height;
 
-    socket.emit('drawing', {
-      x0: x0 / w,
-      y0: y0 / h,
-      x1: x1 / w,
-      y1: y1 / h,
-      selectedColor: selectedColor,
-    });
+    // socket.emit('drawing', {
+    //   x0: x0 / w,
+    //   y0: y0 / h,
+    //   x1: x1 / w,
+    //   y1: y1 / h,
+    //   selectedColor: selectedColor,
+    // });
   };
 
   return (
     <canvas
       ref={canvasRef}
-      width={720}
-      height={480}
-      className='border bg-netural-50'
+      width={width}
+      height={height}
+      className='bg-netural-50 border'
       onMouseDown={(e) => mouseDown(e)}
       onMouseMove={(e) => throttle(mouseMove(e), 10)}
       onMouseUp={(e) => mouseUp(e)}
