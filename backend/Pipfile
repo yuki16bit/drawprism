@@ -15,6 +15,7 @@ requests = "*"
 shortuuid = "*"
 redis = "*"
 celery = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 
