@@ -1,8 +1,7 @@
-import { useRef, useEffect, useState, useContext } from 'react';
-// import { SocketContext } from '../context/socketIo';
+import { useRef, useEffect, useState } from 'react';
+import Draggable from 'react-draggable';
 
 const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
-  // const socket = useContext(SocketContext);
   const canvasRef = useRef(null);
   const context = useRef(null);
   const [drawing, setDrawing] = useState(false);
@@ -14,7 +13,7 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
     if (canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
       context.current.fillStyle = '#ffffff'; //HERE, use HEX format in 6 digits
-      context.current.fillRect(0, 0, 720, 480); //HERE
+      context.current.fillRect(0, 0, width, height); //HERE
       setCanvasRect(canvasRef.current.getBoundingClientRect());
     }
   }, []);
@@ -103,16 +102,18 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
   };
 
   return (
+    // <Draggable bounds='parent'>
     <canvas
       ref={canvasRef}
       width={width}
       height={height}
-      className='bg-netural-50 border'
+      className='bg-netural-50 m-0 border'
       onMouseDown={(e) => mouseDown(e)}
       onMouseMove={(e) => throttle(mouseMove(e), 10)}
       onMouseUp={(e) => mouseUp(e)}
       onMouseOut={(e) => mouseUp(e)}
     />
+    // </Draggable>
   );
 };
 

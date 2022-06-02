@@ -1,9 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
-// import { SocketContext } from '../context/socketIo';
 import Draggable from 'react-draggable';
 
 const ChatBox = () => {
-  // const socket = useContext(SocketContext);
   const [chattingText, setChattingText] = useState('');
   const [chatLines, setChatLines] = useState([]);
   const onKeyDownInput = (e) => {
@@ -36,7 +34,7 @@ const ChatBox = () => {
         rounded border border-neutral-200 bg-white'
       >
         <strong className='cursor-grab'>
-          <div className='bg-amber-500 px-2 py-1 text-white'>Chat Room</div>
+          <div className='bg-amber-500 px-2 py-1 text-white'>Chat Box</div>
         </strong>
         <div className='flex h-8'>
           <input
