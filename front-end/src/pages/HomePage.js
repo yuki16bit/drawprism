@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { socketActions } from '../features/socketSlice';
 import Spacer from '../components/Spacer';
+import Container from '../components/Container';
 import RoomThumbnail from '../components/RoomThumbnail';
 
 const HomePage = () => {
@@ -15,7 +16,7 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <Container>
       {/* Header */}
       <header className='z-[1]'>
         <div className='mt-8 h-44'>
@@ -100,7 +101,7 @@ const HomePage = () => {
         </div>
       </section>
       <Spacer width='w-24' height='h-24' minWidth='min-w-full' minHeight='min-h-full' />
-    </>
+    </Container>
   );
 };
 
