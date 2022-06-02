@@ -1,7 +1,12 @@
 import { useRef, useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { socketActions } from '../features/socketSlice';
 import Draggable from 'react-draggable';
 
 const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
+  const dispatch = useDispatch();
+  const drawLines = useSelector((state) => state.socket.drawLines);
+
   const canvasRef = useRef(null);
   const context = useRef(null);
   const [drawing, setDrawing] = useState(false);
@@ -12,8 +17,8 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
   useEffect(() => {
     if (canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
-      context.current.fillStyle = '#ffffff'; //HERE, use HEX format in 6 digits
-      context.current.fillRect(0, 0, width, height); //HERE
+      context.current.fillStyle = '#ffffff';
+      context.current.fillRect(0, 0, width, height);
       setCanvasRect(canvasRef.current.getBoundingClientRect());
     }
   }, []);
@@ -21,6 +26,10 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
   // useEffect(() => {
   //   socket.on('drawing', onDrawingEvent);
   // }, [socket]);
+
+  useEffect(() => {
+    console.log('あああああああああああ');
+  }, [drawLines]);
 
   const throttle = (callback, delay) => {
     let previousCall = new Date().getTime();
@@ -91,6 +100,16 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
     }
     const w = canvasRef.current.width;
     const h = canvasRef.current.height;
+
+    dispatch(
+      socketActions.sendDraw({
+        x0: x0 / w,
+        y0: y0 / h,
+        x1: x1 / w,
+        y1: y1 / h,
+        selectedColor: selectedColor,
+      })
+    );
 
     // socket.emit('drawing', {
     //   x0: x0 / w,
