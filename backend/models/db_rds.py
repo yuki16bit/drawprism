@@ -18,7 +18,7 @@ def init_connection_pool():
 
 def get_connection():
   try:
-    cnx = current_app.db_pool.get_connection()
+    cnx = current_app.connection_pool.get_connection()
     if cnx.is_connected():
       return cnx
   except Error as e:
@@ -29,7 +29,7 @@ def with_connection(need_commit=None):
   def decorator(func):
     @wraps(func)
     def decorated_func(*args, **kwargs):
-      cnx = current_app.rds_cnx()
+      cnx = current_app.get_connection()
       cursor = cnx.cursor()
       try:
         result = func(cursor, *args, **kwargs)
