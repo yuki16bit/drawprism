@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Spacer from '../components/Spacer';
+import Container from '../components/Container';
 import RoomThumbnail from '../components/RoomThumbnail';
 
 const SettingsPage = () => {
   const [screenShots, setScreenShots] = useState([]);
   const [chatLogs, setChatLogs] = useState([]);
   return (
-    <>
+    <Container>
       <h1 className='mt-8 mb-16 text-center text-4xl font-bold'>Settings</h1>
       <section id='section-room-info' className='mb-8 block gap-x-8 lg:flex'>
         <aside className='flex basis-2/5 flex-col'>
@@ -33,27 +34,27 @@ const SettingsPage = () => {
           </dd>
           <dt className='font-medium'>Room's Canvas Size</dt>
           <dd className='mt-1 mb-6 flex gap-8 text-lg font-bold lg:mb-2'>
-            <div class='flex items-center'>
+            <div className='flex items-center'>
               <input
                 id='radio-square'
                 type='radio'
                 value='square'
                 name='radio-canvas-size'
-                class='h-4 w-4 bg-white text-amber-500 accent-amber-600'
+                className='h-4 w-4 bg-white text-amber-500 accent-amber-600'
               />
-              <label for='radio-square' class='ml-2'>
+              <label htmlFor='radio-square' className='ml-2'>
                 2000 × 2000 (Square)
               </label>
             </div>
-            <div class='flex items-center'>
+            <div className='flex items-center'>
               <input
                 id='radio-a5'
                 type='radio'
                 value='a5'
                 name='radio-canvas-size'
-                class='h-4 w-4 bg-white text-amber-500 accent-amber-600'
+                className='h-4 w-4 bg-white text-amber-500 accent-amber-600'
               />
-              <label for='radio-a5' class='ml-2'>
+              <label htmlFor='radio-a5' className='ml-2'>
                 1750 × 2479 (A5)
               </label>
             </div>
@@ -130,7 +131,7 @@ const SettingsPage = () => {
         </dl>
       </section>
       <Spacer width='w-24' height='h-24' minWidth='min-w-full' minHeight='min-h-full' />
-    </>
+    </Container>
   );
 };
 

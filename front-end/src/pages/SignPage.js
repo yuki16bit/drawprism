@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import useQueryString from '../custom-hooks/useQueryString';
 import { FiTwitter } from 'react-icons/fi';
+import Container from '../components/Container';
 
 const SignPage = () => {
   let queryString = useQueryString();
@@ -11,7 +12,7 @@ const SignPage = () => {
   }, [queryString]);
 
   return (
-    <>
+    <Container>
       <h1 className='mt-8 mb-16 text-center text-4xl font-bold'>
         {signType === 'up' && 'Sign up'}
         {signType === 'in' && 'Sign in'}
@@ -67,7 +68,7 @@ const SignPage = () => {
           Continue with Twitter
         </button>
       </div>
-    </>
+    </Container>
   );
 };
 
