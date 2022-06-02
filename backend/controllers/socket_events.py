@@ -21,10 +21,11 @@ def authentication(jwt_cookie):
     jwt = generate_jwt_token(user['uuid'], user['name'])
     emit('anonymous-signup', jwt)
 
-@socket_io.on('chatting')
-def chatting(chatting_text):
-  send(chatting_text, broadcast=True)
+@socket_io.on('send-chat')
+def chatting(chatting_data):
+  print('chatting_data', chatting_data)
+  emit('receive-chat', chatting_data, broadcast=True)
 
-@socket_io.on('drawing')
-def drawing(data):
-  emit('drawing', data, broadcast=True)
+@socket_io.on('send-draw')
+def drawing(drawing_data):
+  emit('receive-draw', drawing_data, broadcast=True)
