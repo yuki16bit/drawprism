@@ -1,22 +1,32 @@
 from flask import current_app
 from datetime import datetime, timedelta
-from models.db_rds import with_connection
+from werkzeug.security import generate_password_hash, check_password_hash
+from models.db_mongo_atlas import db
 from models.nickname import query_random_nickname
 from random import randint
 import jwt
 import shortuuid
 import math
 
-@with_connection(need_commit=True)
-def signup_user(cursor, new_user_uuid, new_user_name):
-  cursor.execute('INSERT INTO user (uuid, name) VALUES (%s, %s)', (new_user_uuid, new_user_name))
+def sign_up_user(new_uuid, new_name, new_email, new_password):
+  db.users.insert_one({
+    'uuid': new_uuid,
+    'name': new_name,
+    'email': new_email,
+    'password': new_password
+  })
 
+def query_user_uuid(uuid):
+  return db.users.find_one({'uuid': uuid})
 
-@with_connection(need_commit=False)
-def query_user(cursor, uuid):
-  cursor.execute('SELECT name FROM user WHERE uuid = %s', (uuid, ))
-  user = cursor.fetchone()
-  return user[0]
+def query_user_email(email):
+  return db.users.find_one({'email': email})
+
+def hash_password(password):
+  return generate_password_hash(password)
+
+def verify_password(password_hash, password):
+  return check_password_hash(password_hash, password)
 
 def verify_jwt_token(token):
   try:
@@ -35,6 +45,6 @@ def generate_jwt_token(uuid, name, is_anonymous=True):
   return jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm=current_app.config['JWT_ALG'])
 
 def generate_anonymous_user():
-  new_user_uuid = shortuuid.uuid()[:7]
-  new_user_name = query_random_nickname() + str(randint(math.pow(10, 3), math.pow(10, 4)-1))
-  return {'uuid':new_user_uuid, 'name': new_user_name}
+  uuid = shortuuid.uuid()[:7]
+  name = query_random_nickname() + str(randint(10, math.pow(10, 4)-1))
+  return {'uuid':uuid, 'name': name, 'is_anonymous': True}
