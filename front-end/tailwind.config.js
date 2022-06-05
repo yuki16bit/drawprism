@@ -13,7 +13,20 @@ module.exports = {
         'image-base': 'url("../public/images/bg-full.jpg")',
         'image-circle': 'url("../public/images/bg-circle.png")',
       },
+      keyframes: {
+        'dot-flashing': {
+          '0%': {
+            backgroundColor: '#3b82f6',
+          },
+          '50%, 100%': {
+            backgroundColor: '#93c5fd',
+          },
+        },
+      },
+      animation: {
+        'dot-flashing': 'dot-flashing 1s infinite alternate',
+      },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animation-delay')],
 };
