@@ -1,11 +1,10 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
-export const socketSlice = createSlice({
-  name: 'socket',
+export const socketIoSlice = createSlice({
+  name: 'socketIo',
   initialState: {
     isConnected: false,
     isEstablishingConnection: false,
-    user: {},
     chatLines: [],
     drawLines: [],
   },
@@ -14,10 +13,7 @@ export const socketSlice = createSlice({
       return { ...state, isEstablishingConnection: true };
     },
     connectionEstablished: (state) => {
-      return { ...state, isConnected: true, isEstablishingConnection: true };
-    },
-    anonymousSignin: (state, action) => {
-      return { ...state, user: action.payload, isEstablishingConnection: false };
+      return { ...state, isConnected: true, isEstablishingConnection: false };
     },
     sendChat: (state, action) => {
       console.log('send chat');
@@ -36,6 +32,6 @@ export const socketSlice = createSlice({
   },
 });
 
-export const socketActions = socketSlice.actions;
+export const socketIoActions = socketIoSlice.actions;
 
-export default socketSlice.reducer;
+export default socketIoSlice.reducer;
