@@ -1,7 +1,3 @@
-"""
-  Crawl some words on web and stored into database,
-  in order to generate anonymous user's nickname.
-"""
 import os
 import requests
 from bs4 import BeautifulSoup
@@ -15,13 +11,13 @@ def crawl_animal_name():
   }
   res=requests.get(url, headers=headers).text
   soup=BeautifulSoup(res, 'html.parser').select('div.wordlist-item')
-  word_list = []
+  words = []
   for item in soup:
     childTag = item.find('a')
     if childTag:
       if len(childTag.contents[0].split()) <= 1:
-        word_list.append((childTag.contents[0].lower(), ))
+        words.append({'word': childTag.contents[0].lower()})
     else:
       if len(item.contents[0].split()) <= 1:
-        word_list.append((item.contents[0].lower(), ))
-  insert_new_nicknames(word_list)
+        words.append({'word': item.contents[0].lower() })
+  insert_new_nicknames(words)
