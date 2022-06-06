@@ -25,7 +25,7 @@ const SettingPage = () => {
     data: setting,
     isLoading: isGetSettingLoading,
     isSuccess: isGetSettingSuccess,
-  } = useGetSettingQuery(roomUuid ?? queryString.get('room'));
+  } = useGetSettingQuery(roomUuid ? roomUuid : queryString.get('room'));
   const [deleteSetting, { isLoading: isDeleteSettingLoading, isSuccess: isDeleteSettingSuccess }] =
     useDeleteSettingMutation();
   const [updateSetting, { isLoading: isUpdateSettingLoading }] = useUpdateSettingMutation();
@@ -217,12 +217,20 @@ const SettingPage = () => {
                 </div>
                 <div className='flex flex-col gap-y-3'>
                   <span className='mt-6 text-center lg:mt-0'>Join the Room!</span>
-                  <Link to='/room' className='block w-full'>
+                  <Link
+                    to={'/room'}
+                    className='block w-full'
+                    state={{ roomUuid: setting?.roomUuid, mode: 'painter' }}
+                  >
                     <button className='block w-full rounded bg-amber-500 px-2 py-1 text-lg text-white transition hover:bg-amber-600'>
                       Join as a Painter
                     </button>
                   </Link>
-                  <Link to='/room' className='block w-full'>
+                  <Link
+                    to={'/room'}
+                    className='block w-full'
+                    state={{ roomUuid: setting?.roomUuid, mode: 'viewer' }}
+                  >
                     <button className='block w-full rounded bg-amber-500 px-2 py-1 text-lg text-white transition hover:bg-amber-600'>
                       Join as a Viewer
                     </button>
