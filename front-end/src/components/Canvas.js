@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { socketActions } from '../features/socketSlice';
+import { socketIoActions } from '../features/socketIoSlice';
 import Draggable from 'react-draggable';
 
 const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
@@ -102,7 +102,7 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
     const h = canvasRef.current.height;
 
     dispatch(
-      socketActions.sendDraw({
+      socketIoActions.sendDraw({
         x0: x0 / w,
         y0: y0 / h,
         x1: x1 / w,

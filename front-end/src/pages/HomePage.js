@@ -1,19 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { socketActions } from '../features/socketSlice';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useGetUserQuery, useCreateSettingMutation } from '../features/apiSlice';
+import { socketIoActions } from '../features/socketIoSlice';
 import Spacer from '../components/Spacer';
 import Container from '../components/Container';
 import RoomThumbnail from '../components/RoomThumbnail';
+import DotsLoader from '../components/DotsLoader';
 
 const HomePage = () => {
+  let navigate = useNavigate();
   const dispatch = useDispatch();
+  const [
+    createSetting,
+    {
+      data: createSettingRes,
+      isLoading: isCreateSettingLoading,
+      isSuccess: isCreateSettingSuccess,
+    },
+  ] = useCreateSettingMutation();
   const [activeRooms, setactiveRooms] = useState([]);
   const [historyRooms, setHistoryRooms] = useState([]);
+  const { data: user } = useGetUserQuery();
+
+  const createRoom = async (e) => {
+    e.preventDefault();
+    createSetting(user.uuid);
+  };
 
   useEffect(() => {
-    dispatch(socketActions.startConnecting());
-  }, [dispatch]);
+    // dispatch(socketIoActions.startConnecting());
+
+    if (isCreateSettingSuccess) navigate(createSettingRes?.location, { replace: true });
+  }, [createSettingRes?.location, isCreateSettingSuccess, navigate]);
 
   return (
     <Container>
@@ -22,11 +41,17 @@ const HomePage = () => {
         <div className='mt-8 h-44'>
           <h1 className='text-center text-4xl font-bold '>DrawPrism</h1>
           <h4 className='mt-3 text-center text-lg font-medium'>Real Time Online Paint Chat.</h4>
-          <Link to='/settings'>
-            <button className='mx-auto mt-10 block rounded border bg-amber-500 px-4 py-2 text-xl font-medium text-white transition hover:bg-amber-600'>
+          <Link to='/setting'>
+            <button
+              onClick={createRoom}
+              className='mx-auto mt-10 block rounded bg-amber-500 px-4 py-2 text-xl font-medium text-white transition hover:bg-amber-600'
+            >
               Create a room
             </button>
           </Link>
+          {isCreateSettingLoading && (
+            <DotsLoader wrapClassName='mt-5 flex items-center justify-center gap-1' dotSize='2' />
+          )}
         </div>
       </header>
       {/* Slogan Section */}

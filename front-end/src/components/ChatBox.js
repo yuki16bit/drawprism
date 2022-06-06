@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { socketActions } from '../features/socketSlice';
+import { socketIoActions } from '../features/socketIoSlice';
 import Draggable from 'react-draggable';
 
 const ChatBox = () => {
@@ -13,7 +13,7 @@ const ChatBox = () => {
       console.log(user);
       chattingText !== '' &&
         dispatch(
-          socketActions.sendChat({
+          socketIoActions.sendChat({
             talkerUuid: user.uuid,
             talkerName: user.name,
             text: chattingText,
