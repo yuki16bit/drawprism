@@ -15,7 +15,7 @@ shortuuid = "*"
 redis = "*"
 celery = "*"
 beautifulsoup4 = "*"
-pymongo = "*"
+pymongo = {extras = ["srv"], version = "*"}
 gevent = "*"
 flask-cors = "*"
 
