@@ -6,7 +6,7 @@ export const socketIoSlice = createSlice({
     isConnected: false,
     isEstablishingConnection: false,
     chatLines: [],
-    drawLines: [],
+    currentDrawLine: {},
   },
   reducers: {
     startConnecting: (state) => {
@@ -17,7 +17,6 @@ export const socketIoSlice = createSlice({
     },
     sendChat: (state, action) => {
       console.log('send chat');
-      // return { ...state, chatLines: [action.payload, ...state.chatLines] };
     },
     receiveChat: (state, action) => {
       const newLine = { lineId: nanoid(), ...action.payload };
@@ -27,7 +26,8 @@ export const socketIoSlice = createSlice({
       console.log('send draw');
     },
     receiveDraw: (state, action) => {
-      return { ...state, drawLines: [...state.drawLines, action.payload] };
+      console.log('receive draw');
+      return { ...state, currentDrawLine: { ...action.payload } };
     },
   },
 });

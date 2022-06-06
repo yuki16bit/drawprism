@@ -23,7 +23,7 @@ const socketEvents = {
 const socketIoMiddleware = (store) => {
   let socket;
   return (next) => (action) => {
-    const isConnectionEstablished = socket && store.getState().socket.isConnected;
+    const isConnectionEstablished = socket && store.getState().socketIo.isConnected;
     if (socketIoActions.startConnecting.match(action)) {
       socket = io(`${endPoint}`);
       socket.on(socketEvents.connect, () => {
