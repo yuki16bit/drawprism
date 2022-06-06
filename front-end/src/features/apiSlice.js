@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const apiSlice = createApi({
@@ -66,6 +67,23 @@ export const apiSlice = createApi({
         url: `/api/setting/${roomUuid}`,
         method: 'DELETE',
       }),
+    }),
+    getChatLogs: builder.mutation({
+      query: (roomUuid) => ({
+        url: `/api/setting/${roomUuid}`,
+        method: 'POST',
+        body: { logName: 'chat' },
+      }),
+      transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
+      invalidatesTags: ['Setting'],
+    }),
+    getParticipates: builder.mutation({
+      query: (roomUuid) => ({
+        url: `/api/setting/${roomUuid}`,
+        method: 'POST',
+        body: { logName: 'participate' },
+      }),
+      transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
       invalidatesTags: ['Setting'],
     }),
   }),
@@ -80,4 +98,6 @@ export const {
   useCreateSettingMutation,
   useUpdateSettingMutation,
   useDeleteSettingMutation,
+  useGetChatLogsMutation,
+  useGetParticipatesMutation,
 } = apiSlice;
