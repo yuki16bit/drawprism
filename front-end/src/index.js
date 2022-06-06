@@ -11,13 +11,13 @@ const rootContainer = document.getElementById('root');
 const root = createRoot(rootContainer);
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <CookieContext.Provider value={cookies}>
-        <BrowserRouter>
-          <Layout />
-        </BrowserRouter>
-      </CookieContext.Provider>
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <CookieContext.Provider value={cookies}>
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
+    </CookieContext.Provider>
+  </Provider>
+  // </React.StrictMode>
 );
