@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGetUserQuery, useCreateSettingMutation } from '../features/apiSlice';
-import { socketIoActions } from '../features/socketIoSlice';
 import Spacer from '../components/Spacer';
 import Container from '../components/Container';
 import RoomThumbnail from '../components/RoomThumbnail';
@@ -10,7 +8,6 @@ import DotsLoader from '../components/DotsLoader';
 
 const HomePage = () => {
   let navigate = useNavigate();
-  const dispatch = useDispatch();
   const [
     createSetting,
     {
@@ -29,8 +26,6 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // dispatch(socketIoActions.startConnecting());
-
     if (isCreateSettingSuccess) navigate(createSettingRes?.location, { replace: true });
   }, [createSettingRes?.location, isCreateSettingSuccess, navigate]);
 
