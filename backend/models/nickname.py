@@ -1,11 +1,11 @@
-from models.db_rds import with_connection
+from models.db_mongo_atlas import db
 
-@with_connection(need_commit=True)
-def insert_new_nicknames(cursor, word_list):
-  cursor.executemany('INSERT INTO nickname (word) VALUES (%s)', word_list)
+def insert_new_nicknames(words):
+  db.nicknames.insert_many(words)
 
-@with_connection(need_commit=False)
-def query_random_nickname(cursor):
-  cursor.execute('SELECT word FROM nickname ORDER BY RAND() LIMIT 1')
-  random_nickname = cursor.fetchone()
-  return random_nickname[0]
+def query_random_nickname():
+  cursor=db.nicknames.aggregate([{ '$sample': { 'size': 1 } }])
+  res=None
+  for document in cursor:
+    res=document['word']
+  return res
