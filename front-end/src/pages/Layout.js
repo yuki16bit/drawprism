@@ -107,6 +107,7 @@ const Layout = () => {
           <Route path='/sign' element={<SignPage />} />
           <Route path='/setting' element={<SettingPage />} />
           <Route path='/room' element={<RoomPage />} />
+          <Route path='/room/:roomUuid' element={<SettingPage />} />
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </main>
