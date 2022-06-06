@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useGetUserQuery } from '../features/apiSlice';
+
 import { socketIoActions } from '../features/socketIoSlice';
 import Draggable from 'react-draggable';
 
 const ChatBox = () => {
   const dispatch = useDispatch();
   const [chattingText, setChattingText] = useState('');
-  const chatLines = useSelector((state) => state.socket.chatLines);
-  const user = useSelector((state) => state.socket.user);
+  const chatLines = useSelector((state) => state.socketIo.chatLines);
+  const { data: user } = useGetUserQuery();
   const onKeyDownInput = (e) => {
     if (e.key === 'Enter') {
       console.log(user);

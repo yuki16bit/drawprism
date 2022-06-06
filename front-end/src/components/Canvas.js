@@ -3,9 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { socketIoActions } from '../features/socketIoSlice';
 import Draggable from 'react-draggable';
 
-const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
+const Canvas = ({ width = 1024, height = 1024 }) => {
   const dispatch = useDispatch();
-  const drawLines = useSelector((state) => state.socket.drawLines);
+  const currentDrawLine = useSelector((state) => state.socketIo.currentDrawLine);
+  const currentColor = useSelector((state) => state.colorPicker.colorCode);
 
   const canvasRef = useRef(null);
   const context = useRef(null);
@@ -23,13 +24,15 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   socket.on('drawing', onDrawingEvent);
-  // }, [socket]);
+  const onReceiveDraw = (data) => {
+    const w = canvasRef.current.width;
+    const h = canvasRef.current.height;
+    drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.currentColor);
+  };
 
   useEffect(() => {
-    console.log('あああああああああああ');
-  }, [drawLines]);
+    onReceiveDraw(currentDrawLine);
+  }, [currentDrawLine]);
 
   const throttle = (callback, delay) => {
     let previousCall = new Date().getTime();
@@ -41,12 +44,6 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
         callback.apply(null, arguments);
       }
     };
-  };
-
-  const onDrawingEvent = (data) => {
-    const w = canvasRef.current.width;
-    const h = canvasRef.current.height;
-    drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
   };
 
   const mouseDown = (e) => {
@@ -64,7 +61,7 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
       y,
       e.clientX - canvasRect.left || e.touches[0].clientX - canvasRect.left,
       e.clientY - canvasRect.top || e.touches[0].clientY - canvasRect.top,
-      selectedColor,
+      currentColor,
       true
     );
     setX(e.clientX - canvasRect.left || e.touches[0].clientX - canvasRect.left);
@@ -81,16 +78,16 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
       y,
       e.clientX - canvasRect.left || e.touches[0].clientX - canvasRect.left,
       e.clientY - canvasRect.top || e.touches[0].clientY - canvasRect.top,
-      selectedColor,
+      currentColor,
       true
     );
   };
 
-  const drawLine = (x0, y0, x1, y1, selectedColor, emit) => {
+  const drawLine = (x0, y0, x1, y1, currentColor, emit) => {
     context.current.beginPath();
     context.current.moveTo(x0, y0);
     context.current.lineTo(x1, y1);
-    context.current.strokeStyle = selectedColor;
+    context.current.strokeStyle = currentColor;
     context.current.lineWidth = 3;
     context.current.stroke();
     context.current.closePath();
@@ -107,17 +104,9 @@ const Canvas = ({ width = 1024, height = 1024, selectedColor = '#0C40BE' }) => {
         y0: y0 / h,
         x1: x1 / w,
         y1: y1 / h,
-        selectedColor: selectedColor,
+        currentColor: currentColor,
       })
     );
-
-    // socket.emit('drawing', {
-    //   x0: x0 / w,
-    //   y0: y0 / h,
-    //   x1: x1 / w,
-    //   y1: y1 / h,
-    //   selectedColor: selectedColor,
-    // });
   };
 
   return (
