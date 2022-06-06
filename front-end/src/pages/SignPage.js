@@ -3,6 +3,7 @@ import { useSignUpUserMutation, useSignInUserMutation } from '../features/apiSli
 import useQueryString from '../custom-hooks/useQueryString';
 import { FiTwitter } from 'react-icons/fi';
 import Container from '../components/Container';
+import Divider from '../components/Divider';
 
 const SignPage = () => {
   let queryString = useQueryString();
@@ -83,11 +84,7 @@ const SignPage = () => {
             {signMode === 'in' && 'Sign in'}
           </button>
         </form>
-        <div className='relative flex items-center py-6'>
-          <div className='flex-grow border-t border-stone-300'></div>
-          <span className='mx-4 flex-shrink font-medium'>OR</span>
-          <div className='flex-grow border-t border-stone-300'></div>
-        </div>
+        <Divider message='OR' pyNum={6} />
         <button className='mb-6 block flex w-full items-center justify-center gap-2 rounded bg-sky-500 py-2 text-white transition hover:bg-sky-600/80'>
           <FiTwitter />
           Continue with Twitter
