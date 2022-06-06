@@ -3,6 +3,7 @@ monkey.patch_all()
 
 from controllers.user import bp_c_user
 from controllers.setting import bp_c_setting
+from controllers.room import bp_c_room
 from flask import Flask
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -28,6 +29,7 @@ def internal_error(e):
 
 app.register_blueprint(bp_c_user, url_prefix='/api')
 app.register_blueprint(bp_c_setting, url_prefix='/api')
+app.register_blueprint(bp_c_room)
 
 socket_io = SocketIO(app, cors_allowed_origins=[os.getenv('DEV_ORIGIN'), os.getenv('PROD_ORIGIN')], async_mode='gevent', logger=True)
 from controllers import socket_events
