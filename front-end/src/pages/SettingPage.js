@@ -5,8 +5,8 @@ import {
   useGetSettingQuery,
   useDeleteSettingMutation,
   useUpdateSettingMutation,
-  useGetChatLogsMutation,
-  useGetParticipatesMutation,
+  useLazyGetAllChatLogQuery,
+  useGetAllParticipateQuery,
 } from '../features/apiSlice';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Spacer from '../components/Spacer';
@@ -30,17 +30,18 @@ const SettingPage = () => {
     useDeleteSettingMutation();
   const [updateSetting, { isLoading: isUpdateSettingLoading }] = useUpdateSettingMutation();
   const [
-    getChatLogs,
-    { data: chatLogs, isLoading: isGetChatLogsLoading, isSuccess: isGetChatLogsSuccess },
-  ] = useGetChatLogsMutation();
-  const [
-    getParticipates,
+    getAllChatLog,
     {
-      data: participates,
-      isLoading: isGetParticipatesLoading,
-      isSuccess: isGetParticipatesSuccess,
+      data: lazyAllChatLog,
+      isLoading: isLazyGetAllChatLogLoading,
+      isSuccess: isLazyGetAllChatLogSuccess,
     },
-  ] = useGetParticipatesMutation();
+  ] = useLazyGetAllChatLogQuery();
+  const {
+    data: allParticipate,
+    isLoading: isGetAllParticipateLoading,
+    isSuccess: isGetAllParticipateSuccess,
+  } = useGetAllParticipateQuery(roomUuid ? roomUuid : queryString.get('room'));
 
   const { data: user } = useGetUserQuery();
   const [isOwner, setIsOwner] = useState(false);
@@ -49,10 +50,10 @@ const SettingPage = () => {
   const [canvasSize, setCanvasSize] = useState('');
 
   const calcCanvasSizeNum = (canvasSize) => {
-    return canvasSize === 'square' ? '2000 × 2000' : '1750 × 2479';
+    return canvasSize === 'square' ? '2000 × 2000' : '2479 × 1750';
   };
-  const requestChatLogs = () => {
-    getChatLogs(setting?.roomUuid);
+  const lazyRequestAllChatLog = () => {
+    getAllChatLog(setting?.roomUuid);
   };
   const changeSetting = () => {
     if (roomName === '') {
@@ -76,9 +77,8 @@ const SettingPage = () => {
       setRoomName(setting?.roomName ? setting.roomName : '');
       setRoomDescription(setting?.roomDescription ? setting.roomDescription : '');
       setCanvasSize(setting?.canvasSize ? setting.canvasSize : 'square');
-      getParticipates(setting?.roomUuid);
     }
-  }, [getParticipates, isGetSettingSuccess, setting, user]);
+  }, [isGetSettingSuccess, setting, user]);
 
   useEffect(() => {
     if (isDeleteSettingSuccess) navigate('/', { replace: true });
@@ -111,20 +111,22 @@ const SettingPage = () => {
                 </dd>
                 <dt>Last Activity :</dt>
                 <dd className='font-medium'>
-                  {setting?.lastActivity ? setting.lastActivity : '—'}
+                  {setting?.lastActivity
+                    ? new Date(setting.lastActivity).toLocaleDateString('en-CA')
+                    : '—'}
                 </dd>
               </dl>
               <dt className='flex gap-4 font-medium'>
                 Participants
-                {isGetParticipatesLoading && (
+                {isGetAllParticipateLoading && (
                   <DotsLoader wrapClassName='flex items-center justify-center gap-1' dotSize='2' />
                 )}
               </dt>
               <dd className='mb-6 h-[100px] grow basis-auto overflow-y-auto rounded border bg-white px-4 py-2 text-lg font-bold md:min-h-[120px] lg:mb-2'>
-                {isGetParticipatesSuccess && participates?.length > 0 ? (
-                  participates.map((participate) => (
+                {isGetAllParticipateSuccess && allParticipate?.length > 0 ? (
+                  allParticipate.map((participate) => (
                     <div key={`${participate.id}`}>
-                      <span className='font-medium text-amber-500'>{`${participate.role} : ${participate.name} : `}</span>
+                      <span className='font-medium text-amber-500'>{`${participate.role} : ${participate.userName} : `}</span>
                       {participate.mode}
                     </div>
                   ))
@@ -198,7 +200,7 @@ const SettingPage = () => {
                   <span className='text-blue-500 underline transition hover:text-blue-700'>
                     {process.env.REACT_APP_ENV !== 'production'
                       ? `http://127.0.0.1:3000/room/${setting?.roomUuid}`
-                      : `https://www.drawprism.space/${setting?.roomUuid}`}
+                      : `https://drawprism.space/${setting?.roomUuid}`}
                   </span>
                 </Link>
               </dd>
@@ -220,7 +222,14 @@ const SettingPage = () => {
                   <Link
                     to={'/room'}
                     className='block w-full'
-                    state={{ roomUuid: setting?.roomUuid, mode: 'painter' }}
+                    state={{
+                      roomUuid: setting?.roomUuid,
+                      userName: user?.name,
+                      userUuid: user?.uuid,
+                      role: isOwner ? 'Owner' : 'Guest',
+                      mode: 'painter',
+                      canvasSize: setting?.canvasSize,
+                    }}
                   >
                     <button className='block w-full rounded bg-amber-500 px-2 py-1 text-lg text-white transition hover:bg-amber-600'>
                       Join as a Painter
@@ -229,7 +238,14 @@ const SettingPage = () => {
                   <Link
                     to={'/room'}
                     className='block w-full'
-                    state={{ roomUuid: setting?.roomUuid, mode: 'viewer' }}
+                    state={{
+                      roomUuid: setting?.roomUuid,
+                      userName: user?.name,
+                      userUuid: user?.uuid,
+                      role: isOwner ? 'Owner' : 'Guest',
+                      mode: 'viewer',
+                      canvasSize: setting?.canvasSize,
+                    }}
                   >
                     <button className='block w-full rounded bg-amber-500 px-2 py-1 text-lg text-white transition hover:bg-amber-600'>
                       Join as a Viewer
@@ -239,7 +255,7 @@ const SettingPage = () => {
               </dd>
               {isOwner && (
                 <>
-                  <Divider message='Owners Only' pyNum={2} />
+                  <Divider message='Owners Only' wrapClassName='relative flex items-center py-2' />
                   <button
                     onClick={changeSetting}
                     disabled={!isOwner}
@@ -296,12 +312,12 @@ const SettingPage = () => {
                 <div className='flex items-center gap-3'>
                   <button
                     disabled={!isOwner}
-                    onClick={requestChatLogs}
+                    onClick={lazyRequestAllChatLog}
                     className='block rounded bg-amber-500 px-2 py-1 text-white transition hover:bg-amber-600'
                   >
                     Request Chat Logs
                   </button>
-                  {isGetChatLogsLoading && (
+                  {isLazyGetAllChatLogLoading && (
                     <DotsLoader
                       wrapClassName='flex items-center justify-center gap-1'
                       dotSize='2'
@@ -309,8 +325,8 @@ const SettingPage = () => {
                   )}
                 </div>
                 <div className='mt-3 max-h-[540px] min-h-[2.5rem] grow overflow-auto rounded border bg-white px-4 py-2'>
-                  {isGetChatLogsSuccess && chatLogs?.length > 0 ? (
-                    chatLogs.map((chat) => (
+                  {isLazyGetAllChatLogSuccess && lazyAllChatLog?.length > 0 ? (
+                    lazyAllChatLog.map((chat) => (
                       <div key={`${chat.id}`}>
                         <span className='font-medium text-amber-500'>{`${chat.talker} : `}</span>
                         {chat.line}
