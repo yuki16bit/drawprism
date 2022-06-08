@@ -36,10 +36,10 @@ const HomePage = () => {
         <div className='mt-8 h-44'>
           <h1 className='text-center text-4xl font-bold '>DrawPrism</h1>
           <h4 className='mt-3 text-center text-lg font-medium'>Real Time Online Paint Chat.</h4>
-          <Link to='/setting'>
+          <Link to='/setting' className='mx-auto mt-10 block h-fit w-fit'>
             <button
               onClick={createRoom}
-              className='mx-auto mt-10 block rounded bg-amber-500 px-4 py-2 text-xl font-medium text-white transition hover:bg-amber-600'
+              className='rounded bg-amber-500 px-4 py-2 text-xl font-medium text-white transition hover:bg-amber-600'
             >
               Create a room
             </button>
