@@ -84,7 +84,7 @@ const SignPage = () => {
             {signMode === 'in' && 'Sign in'}
           </button>
         </form>
-        <Divider message='OR' pyNum={6} />
+        <Divider message='OR' wrapClassName='relative flex items-center py-6' />
         <button className='mb-6 block flex w-full items-center justify-center gap-2 rounded bg-sky-500 py-2 text-white transition hover:bg-sky-600/80'>
           <FiTwitter />
           Continue with Twitter

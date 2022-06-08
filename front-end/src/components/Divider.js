@@ -1,6 +1,6 @@
-const Divider = ({ message, pyNum = 0 }) => {
+const Divider = ({ message, wrapClassName }) => {
   return (
-    <div className={`relative flex items-center ${pyNum ? `py-${pyNum}` : null}`}>
+    <div className={wrapClassName}>
       <div className='flex-grow border-t border-stone-300'></div>
       <span className='mx-4 flex-shrink font-medium'>{message}</span>
       <div className='flex-grow border-t border-stone-300'></div>
