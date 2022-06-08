@@ -18,6 +18,7 @@ beautifulsoup4 = "*"
 pymongo = {extras = ["srv"], version = "*"}
 gevent = "*"
 flask-cors = "*"
+gevent-websocket = "*"
 
 [dev-packages]
 
