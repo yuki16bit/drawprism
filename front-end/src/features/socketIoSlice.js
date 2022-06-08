@@ -15,6 +15,9 @@ export const socketIoSlice = createSlice({
     connectionEstablished: (state) => {
       return { ...state, isConnected: true, isEstablishingConnection: false };
     },
+    joinRoom: (state, action) => {
+      console.log('join room');
+    },
     sendChat: (state, action) => {
       console.log('send chat');
     },
@@ -28,6 +31,13 @@ export const socketIoSlice = createSlice({
     receiveDraw: (state, action) => {
       console.log('receive draw');
       return { ...state, currentDrawLine: { ...action.payload } };
+    },
+    leaveRoom: (state, action) => {
+      console.log('leave room');
+    },
+    disconnect: (state) => {
+      console.log('disconnect');
+      return { ...state, isConnected: false };
     },
   },
 });

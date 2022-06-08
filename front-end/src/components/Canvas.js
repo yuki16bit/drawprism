@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { socketIoActions } from '../features/socketIoSlice';
 import Draggable from 'react-draggable';
 
-const Canvas = ({ width = 1024, height = 1024 }) => {
+const Canvas = ({ locationState, width = 1024, height = 1024 }) => {
   const dispatch = useDispatch();
   const currentDrawLine = useSelector((state) => state.socketIo.currentDrawLine);
   const currentColor = useSelector((state) => state.colorPicker.colorCode);
@@ -105,6 +105,7 @@ const Canvas = ({ width = 1024, height = 1024 }) => {
         x1: x1 / w,
         y1: y1 / h,
         currentColor: currentColor,
+        roomUuid: locationState.roomUuid,
       })
     );
   };

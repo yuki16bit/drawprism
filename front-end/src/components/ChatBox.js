@@ -1,21 +1,20 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetUserQuery } from '../features/apiSlice';
-
 import { socketIoActions } from '../features/socketIoSlice';
 import Draggable from 'react-draggable';
 
-const ChatBox = () => {
+const ChatBox = ({ locationState }) => {
   const dispatch = useDispatch();
   const [chattingText, setChattingText] = useState('');
   const chatLines = useSelector((state) => state.socketIo.chatLines);
   const { data: user } = useGetUserQuery();
   const onKeyDownInput = (e) => {
     if (e.key === 'Enter') {
-      console.log(user);
       chattingText !== '' &&
         dispatch(
           socketIoActions.sendChat({
+            roomUuid: locationState.roomUuid,
             talkerUuid: user.uuid,
             talkerName: user.name,
             text: chattingText,
@@ -63,60 +62,12 @@ const ChatBox = () => {
           {chatLines?.length > 0 &&
             chatLines.map((chatLine) => (
               <div key={chatLine.lineId} className='mb-1'>
-                <span className='font-medium text-amber-500'>{chatLine.talkerName}:</span>
+                <span className='font-medium text-amber-500'>
+                  {`${chatLine.talkerName} (${chatLine.talkerUuid}) `}:
+                </span>
                 {chatLine.text}
               </div>
             ))}
-          {/*          
-            <div className='mb-1'>
-              <span className='font-medium text-amber-500'>匿名柚柚 : </span>I have long scrollable
-              content with a handle
-            </div>
-            <div className='mb-1'>
-              <span className='font-medium text-amber-500'>匿名柚柚 : </span>I have long scrollable
-              content with a handle
-            </div>
-            <div className='mb-1'>
-              <span className='font-medium text-amber-500'>匿名柚柚 : </span>I have long scrollable
-              content with a handle
-            </div>
-            <div className='mb-1'>
-              <span className='font-medium text-amber-500'>匿名柚柚 : </span>I have long scrollable
-              content with a handle
-            </div>
-            <div className='mb-1'>
-              <span className='font-medium text-amber-500'>匿名柚柚</span> (998b19a) has{' '}
-              <div className='text-sky-500'>joined</div> this room. (👥2)
-            </div>
-            <div className='mb-1'>
-              <span className='font-medium text-rose-400'>匿名蘭格 : </span>I have long scrollable
-              content with a handle
-            </div>
-            <div className='mb-1'>
-              <span className='font-medium text-rose-400'>匿名蘭格 : </span>I have long scrollable
-              content with a handle
-            </div>
-            <div className='mb-1'>
-              <span className='font-medium text-rose-400'>匿名蘭格 : </span>I have long scrollable
-              content with a handle
-            </div>
-            <div className='mb-1'>
-              <span className='font-medium text-rose-400'>匿名蘭格 : </span>I have long scrollable
-              content with a handle
-            </div>
-            <div className='mb-1'>
-              <p className='mb-1 ml-auto w-fit'>Join. (👥1)</p>
-              <div>
-                <p className='mb-1'>
-                  (History) <span className='font-medium'>匿名蘭格 : </span>I have long scrollable
-                  content with a handle
-                </p>
-              </div>
-              <p className='mb-1 ml-auto w-fit text-red-500'>You are room owner.</p>
-              <p className='mb-1 ml-auto w-fit'>Canvas size : 2000 x 2000</p>
-              <p className='mb-1 ml-auto w-fit'>Connected.</p>
-            </div>
-          */}
         </div>
       </div>
     </Draggable>

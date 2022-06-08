@@ -68,23 +68,23 @@ export const apiSlice = createApi({
         method: 'DELETE',
       }),
     }),
-    getChatLogs: builder.mutation({
-      query: (roomUuid) => ({
-        url: `/api/setting/${roomUuid}`,
-        method: 'POST',
-        body: { logName: 'chat' },
-      }),
+    getAllChatLog: builder.query({
+      query: (roomUuid) => `/api/chat_log/${roomUuid}`,
       transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
-      invalidatesTags: ['Setting'],
+      providesTags: ['ChatLog'],
     }),
-    getParticipates: builder.mutation({
-      query: (roomUuid) => ({
-        url: `/api/setting/${roomUuid}`,
-        method: 'POST',
-        body: { logName: 'participate' },
-      }),
+    getAllParticipate: builder.query({
+      query: (roomUuid) => `/api/participate/${roomUuid}`,
       transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
-      invalidatesTags: ['Setting'],
+      providesTags: ['Participate'],
+    }),
+    updateParticipate: builder.mutation({
+      query: (updates) => ({
+        url: `/api/participate/${updates.roomUuid}`,
+        method: 'PATCH',
+        body: updates,
+      }),
+      invalidatesTags: ['Participate'],
     }),
   }),
 });
@@ -98,6 +98,7 @@ export const {
   useCreateSettingMutation,
   useUpdateSettingMutation,
   useDeleteSettingMutation,
-  useGetChatLogsMutation,
-  useGetParticipatesMutation,
+  useLazyGetAllChatLogQuery,
+  useGetAllParticipateQuery,
+  useUpdateParticipateMutation,
 } = apiSlice;

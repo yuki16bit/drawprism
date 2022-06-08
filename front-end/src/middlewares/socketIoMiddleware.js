@@ -1,5 +1,4 @@
 import { io } from 'socket.io-client';
-import { cookies } from '../context/universalCookie';
 import { socketIoActions } from '../features/socketIoSlice';
 
 const endPoint =
@@ -15,9 +14,6 @@ const socketEvents = {
   receiveDraw: 'receive-draw',
   sendChat: 'send-chat',
   receiveChat: 'receive-chat',
-  requestChatLog: 'request-chatlog',
-  requestDrawLog: 'request-drawlog',
-  disconnect: 'disconnect',
 };
 
 const socketIoMiddleware = (store) => {
@@ -28,11 +24,14 @@ const socketIoMiddleware = (store) => {
       socket = io(`${endPoint}`);
       socket.on(socketEvents.connect, () => {
         store.dispatch(socketIoActions.connectionEstablished());
-        console.log('connected!');
+      });
+      socket.on(socketEvents.joinRoom, (joinData) => {
+        console.log('mid-onJoin', joinData);
+        store.dispatch(socketIoActions.receiveChat(joinData));
       });
       socket.on(socketEvents.receiveChat, (chattingData) => {
         // onChatting
-        console.log('mid-onChatting', chattingData, cookies);
+        console.log('mid-onChatting', chattingData);
         store.dispatch(socketIoActions.receiveChat(chattingData));
       });
       socket.on(socketEvents.receiveDraw, (drawingData) => {
@@ -40,13 +39,25 @@ const socketIoMiddleware = (store) => {
         console.log('mid-onDrawing', drawingData);
         store.dispatch(socketIoActions.receiveDraw(drawingData));
       });
+      socket.on(socketEvents.leaveRoom, (leaveData) => {
+        console.log('mid-onLeave', leaveData);
+        store.dispatch(socketIoActions.receiveChat(leaveData));
+        store.dispatch(socketIoActions.disconnect());
+        socket.disconnect();
+      });
     }
 
+    if (socketIoActions.joinRoom.match(action) && isConnectionEstablished) {
+      socket.emit(socketEvents.joinRoom, action.payload);
+    }
     if (socketIoActions.sendChat.match(action) && isConnectionEstablished) {
       socket.emit(socketEvents.sendChat, action.payload);
     }
     if (socketIoActions.sendDraw.match(action) && isConnectionEstablished) {
       socket.emit(socketEvents.sendDraw, action.payload);
+    }
+    if (socketIoActions.leaveRoom.match(action) && isConnectionEstablished) {
+      socket.emit(socketEvents.leaveRoom, action.payload);
     }
     next(action);
   };
