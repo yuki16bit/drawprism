@@ -101,6 +101,19 @@ const Layout = () => {
       </nav>
       {/* Main */}
       <main className='z-[1] grow'>
+        {!isRoomPath && (
+          <Spacer width='w-[76px]' height='h-[76px]' minWidth='min-w-full' minHeight='min-h-full' />
+        )}
+        <ScrollToTop>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/sign' element={<SignPage />} />
+            <Route path='/setting' element={<SettingPage />} />
+            <Route path='/room' element={<RoomPage />} />
+            <Route path='/room/:roomUuid' element={<SettingPage />} />
+            <Route path='*' element={<NotFoundPage />} />
+          </Routes>
+        </ScrollToTop>
         <Spacer width='w-[76px]' height='h-[76px]' minWidth='min-w-full' minHeight='min-h-full' />
         <Routes>
           <Route path='/' element={<Home />} />
