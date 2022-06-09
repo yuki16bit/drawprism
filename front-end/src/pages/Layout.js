@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { useGetUserQuery, useLogOutUserMutation } from '../features/apiSlice';
+import { useDispatch } from 'react-redux';
 import { useLocation, matchPath } from 'react-router';
 import { Routes, Route, Link } from 'react-router-dom';
+import { socketIoActions } from '../features/socketIoSlice';
+import ScrollToTop from './ScrollToTop';
 import Home from './HomePage';
 import SignPage from './SignPage';
 import RoomPage from './RoomPage';
@@ -13,8 +16,11 @@ import ExternalLink from '../components/ExternalLink';
 import { FiLinkedin, FiGithub, FiGlobe } from 'react-icons/fi';
 
 const Layout = () => {
+  const dispatch = useDispatch();
+
   const { pathname } = useLocation();
   const isRoomPath = matchPath('/room', pathname);
+
   const {
     data: user,
     isLoading: isGetUserLoading,
@@ -23,6 +29,11 @@ const Layout = () => {
     error: getUserError,
   } = useGetUserQuery();
   const [logOutUser] = useLogOutUserMutation();
+
+  useEffect(() => {
+    dispatch(socketIoActions.startConnecting());
+  }, []);
+
   useEffect(() => {
     if (isGetUserLoading) {
       console.log('Loading');
@@ -32,6 +43,7 @@ const Layout = () => {
       console.warn(getUserError);
     }
   }, [getUserError, user, isGetUserError, isGetUserLoading, isGetUserSuccess]);
+
   return (
     <div
       className={`relative flex min-h-screen flex-col bg-neutral-100 bg-repeat-x font-global text-base`}
@@ -114,15 +126,6 @@ const Layout = () => {
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </ScrollToTop>
-        <Spacer width='w-[76px]' height='h-[76px]' minWidth='min-w-full' minHeight='min-h-full' />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/sign' element={<SignPage />} />
-          <Route path='/setting' element={<SettingPage />} />
-          <Route path='/room' element={<RoomPage />} />
-          <Route path='/room/:roomUuid' element={<SettingPage />} />
-          <Route path='*' element={<NotFoundPage />} />
-        </Routes>
       </main>
       {/* Footer */}
       {!isRoomPath && (
