@@ -7,13 +7,12 @@ const ToolBox = () => {
       <div
         className='
         absolute
-        top-[500px]
-        right-[10px]
-        left-[1370px]
+        top-[40px]
+        right-[1370px]
+        left-[10px]
         z-10
         flex h-80 min-h-[100px] w-72
         min-w-[200px]
-        resize
         flex-col
         overflow-hidden
         rounded border border-neutral-200 bg-white'
