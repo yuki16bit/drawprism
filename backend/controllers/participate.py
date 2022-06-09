@@ -18,7 +18,6 @@ def get_all_participate(room_uuid):
       raise TypeError('Get participate failed: Must provide room uuid.')
     else:
       result = query_all_participate(room_uuid)
-      print('get room participates', result)
     return jsonify(result['participates'])
   except TypeError as e:
     abort(400, description=generate_abort_msg(e))
