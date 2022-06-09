@@ -14,6 +14,7 @@ const socketEvents = {
   receiveDraw: 'receive-draw',
   sendChat: 'send-chat',
   receiveChat: 'receive-chat',
+  disconnect: 'disconnect',
 };
 
 const socketIoMiddleware = (store) => {
@@ -24,26 +25,22 @@ const socketIoMiddleware = (store) => {
       socket = io(`${endPoint}`);
       socket.on(socketEvents.connect, () => {
         store.dispatch(socketIoActions.connectionEstablished());
+        console.log('??????', store.getState().api);
       });
       socket.on(socketEvents.joinRoom, (joinData) => {
-        console.log('mid-onJoin', joinData);
         store.dispatch(socketIoActions.receiveChat(joinData));
       });
       socket.on(socketEvents.receiveChat, (chattingData) => {
-        // onChatting
-        console.log('mid-onChatting', chattingData);
         store.dispatch(socketIoActions.receiveChat(chattingData));
       });
       socket.on(socketEvents.receiveDraw, (drawingData) => {
-        // onDrawing
-        console.log('mid-onDrawing', drawingData);
         store.dispatch(socketIoActions.receiveDraw(drawingData));
       });
       socket.on(socketEvents.leaveRoom, (leaveData) => {
-        console.log('mid-onLeave', leaveData);
         store.dispatch(socketIoActions.receiveChat(leaveData));
-        store.dispatch(socketIoActions.disconnect());
-        socket.disconnect();
+      });
+      socket.on(socketEvents.disconnect, (disconnectData) => {
+        store.dispatch(socketIoActions.receiveChat(disconnectData));
       });
     }
 
@@ -59,6 +56,7 @@ const socketIoMiddleware = (store) => {
     if (socketIoActions.leaveRoom.match(action) && isConnectionEstablished) {
       socket.emit(socketEvents.leaveRoom, action.payload);
     }
+
     next(action);
   };
 };

@@ -25,19 +25,14 @@ export const socketIoSlice = createSlice({
       const newLine = { lineId: nanoid(), ...action.payload };
       return { ...state, chatLines: [newLine, ...state.chatLines] };
     },
-    sendDraw: (state, action) => {
-      console.log('send draw');
+    sendDraw: () => {
+      return;
     },
     receiveDraw: (state, action) => {
-      console.log('receive draw');
       return { ...state, currentDrawLine: { ...action.payload } };
     },
     leaveRoom: (state, action) => {
       console.log('leave room');
-    },
-    disconnect: (state) => {
-      console.log('disconnect');
-      return { ...state, isConnected: false };
     },
   },
 });
