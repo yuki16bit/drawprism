@@ -25,7 +25,6 @@ const socketIoMiddleware = (store) => {
       socket = io(`${endPoint}`);
       socket.on(socketEvents.connect, () => {
         store.dispatch(socketIoActions.connectionEstablished());
-        console.log('??????', store.getState().api);
       });
       socket.on(socketEvents.joinRoom, (joinData) => {
         store.dispatch(socketIoActions.receiveChat(joinData));
