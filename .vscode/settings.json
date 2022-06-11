@@ -3,6 +3,6 @@
     "netural", // * Tailwind CSS Color
     "jsonify", // * Flask Module
     "boto", // * AWS SDK for Python
-    "eventlet" // * Concurrent networking library for Python
+    "gevent" // * Concurrent networking library for Python
   ]
 }

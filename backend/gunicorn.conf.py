@@ -3,4 +3,6 @@ workers = 1
 daemon = False
 reload = True
 accesslog = '-'
-worker_class = 'eventlet'
+access_log_format = '%(h)s %(u)s %(t)s "%(r)s" %(s)s %(b)s'
+errorlog = '-'
+worker_class = 'geventwebsocket.gunicorn.workers.GeventWebSocketWorker'

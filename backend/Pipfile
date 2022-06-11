@@ -9,12 +9,16 @@ boto3 = "*"
 mysql-connector-python = "*"
 flask-socketio = "*"
 gunicorn = "*"
-eventlet = "==0.30.2"
 pyjwt = "*"
 requests = "*"
 shortuuid = "*"
 redis = "*"
 celery = "*"
+beautifulsoup4 = "*"
+pymongo = {extras = ["srv"], version = "*"}
+gevent = "*"
+flask-cors = "*"
+gevent-websocket = "*"
 
 [dev-packages]
 

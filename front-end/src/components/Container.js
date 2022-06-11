@@ -1,5 +1,3 @@
-import React from "react";
-
 /* Props Desc
   additionalClassName: string, add additional tailwind css class if needed, separate classes name by space.
 */
@@ -7,8 +5,8 @@ import React from "react";
 const Container = ({ children, additionalClassName }) => {
   return (
     <div
-      className={`container mx-auto px-6 md:px-12 lg:px-18 xl:px-24 2xl:px-36 ${
-        additionalClassName ? additionalClassName : ""
+      className={`lg:px-18 container mx-auto px-6 md:px-12 xl:px-24 2xl:px-36 ${
+        additionalClassName ? additionalClassName : ''
       }`}
     >
       {children}
