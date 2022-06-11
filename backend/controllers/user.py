@@ -7,7 +7,8 @@ from utils.input_validation import validate_email, validate_password, validate_n
 import os
 
 bp_c_user = Blueprint('c_user', __name__)
-CORS(bp_c_user, origins=[os.getenv('DEV_ORIGIN'), os.getenv('PROD_ORIGIN')], supports_credentials='True')
+CORS(bp_c_user, origins=[os.getenv('DEV_ORIGIN'), os.getenv('PROD_ORIGIN'),
+     os.getenv('PROD_ORIGIN_WWW')], supports_credentials='True')
 
 
 class Api_User(MethodView):

@@ -8,7 +8,8 @@ from flask_cors import CORS
 import os
 
 bp_c_participate = Blueprint('c_participate', __name__)
-CORS(bp_c_participate, origins=[os.getenv('DEV_ORIGIN'), os.getenv('PROD_ORIGIN')], supports_credentials=True)
+CORS(bp_c_participate, origins=[os.getenv('DEV_ORIGIN'), os.getenv(
+    'PROD_ORIGIN'), os.getenv('PROD_ORIGIN_WWW')], supports_credentials=True)
 
 
 @bp_c_participate.route('/participate/<room_uuid>', methods=['GET'])
