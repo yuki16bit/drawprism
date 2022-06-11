@@ -49,7 +49,7 @@ const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
         })
       );
     },
-    [currentColor, dispatch, locationState.roomUuid]
+    [currentColor, dispatch, locationState?.roomUuid]
   );
 
   const onReceiveDraw = useCallback(
