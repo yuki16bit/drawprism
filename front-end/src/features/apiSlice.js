@@ -38,6 +38,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['User'],
     }),
+    getAllActiveRoom: builder.query({
+      query: () => '/api/room/active',
+      providesTags: ['AllActiveRoom'],
+    }),
+    getAllHistoryRoom: builder.query({
+      query: () => '/api/room/history',
+      providesTags: ['AllHistoryRoom'],
+    }),
     getSetting: builder.query({
       query: (roomUuid) => ({
         url: '/api/setting',
@@ -94,6 +102,7 @@ export const {
   useSignUpUserMutation,
   useSignInUserMutation,
   useLogOutUserMutation,
+  useLazyGetAllActiveRoomQuery,
   useGetSettingQuery,
   useCreateSettingMutation,
   useUpdateSettingMutation,
