@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useGetUserQuery } from '../features/apiSlice';
 import { socketIoActions } from '../features/socketIoSlice';
 import Draggable from 'react-draggable';
 
-const ChatBox = ({ locationState }) => {
+const ChatBox = ({ locationState, user }) => {
   const dispatch = useDispatch();
   const [chattingText, setChattingText] = useState('');
   const chatLines = useSelector((state) => state.socketIo.chatLines);
-  const { data: user } = useGetUserQuery();
+
   const onKeyDownInput = (e) => {
     if (e.key === 'Enter') {
       chattingText !== '' &&
@@ -61,10 +60,12 @@ const ChatBox = ({ locationState }) => {
         <div className='h-full overflow-y-scroll p-2'>
           {chatLines?.length > 0 &&
             chatLines.map((chatLine) => (
-              <div key={chatLine.lineId} className='mb-1'>
-                <span className='font-medium text-amber-500'>
-                  {`${chatLine.talkerName} (${chatLine.talkerUuid}) `}:
-                </span>
+              <div key={chatLine.id} className='mb-1'>
+                {chatLine.talkerUuid !== undefined && (
+                  <span className='font-medium text-amber-500'>
+                    {`${chatLine.talkerName} (${chatLine.talkerUuid}) `}:{' '}
+                  </span>
+                )}
                 {chatLine.text}
               </div>
             ))}
