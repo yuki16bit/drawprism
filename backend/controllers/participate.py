@@ -39,7 +39,9 @@ def update_participate(room_uuid):
 
       elif updates['action'] and updates['action'] == 'leave':
         if len(current_all_participate['participates']) - 1 <= 0:
-          update_room({'room_uuid': room_uuid, 'is_active': False, 'last_activity': datetime.utcnow()})
+          active = True if (room_uuid == os.getenv('ACTIVE_ROOM_DEV') or room_uuid == os.getenv('ACTIVE_ROOM_ONE') or room_uuid ==
+                            os.getenv('ACTIVE_ROOM_TWO')) else False
+          update_room({'room_uuid': room_uuid, 'is_active': active, 'last_activity': datetime.utcnow()})
         leave_participate({'room_uuid': room_uuid, 'participate': updates['participate']})
 
       else:
