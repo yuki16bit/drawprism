@@ -22,7 +22,7 @@ export const socketIoSlice = createSlice({
       console.log('send chat');
     },
     receiveChat: (state, action) => {
-      const newLine = { lineId: nanoid(), ...action.payload };
+      const newLine = { id: nanoid(), ...action.payload };
       return { ...state, chatLines: [newLine, ...state.chatLines] };
     },
     sendDraw: () => {
@@ -33,6 +33,14 @@ export const socketIoSlice = createSlice({
     },
     leaveRoom: (state, action) => {
       console.log('leave room');
+    },
+    addChatLog: (state, action) => {
+      console.log(action.payload);
+      const divideLine = {
+        id: nanoid(),
+        text: '—History Chat Logs—',
+      };
+      return { ...state, chatLines: [divideLine, ...action.payload] };
     },
   },
 });
