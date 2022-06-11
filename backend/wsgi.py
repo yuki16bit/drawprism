@@ -12,7 +12,7 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__, static_folder='../front-end/build', static_url_path='/')
-CORS(app, origins=[os.getenv('DEV_ORIGIN'), os.getenv('PROD_ORIGIN')])
+CORS(app, origins=[os.getenv('DEV_ORIGIN'), os.getenv('PROD_ORIGIN'), os.getenv('PROD_ORIGIN_WWW')])
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_ALG'] = os.getenv('JWT_ALG')
@@ -39,8 +39,8 @@ app.register_blueprint(bp_c_participate, url_prefix='/api')
 app.register_blueprint(bp_c_chat_log, url_prefix='/api')
 
 socket_io = SocketIO(app, cors_allowed_origins=[os.getenv('DEV_ORIGIN'), os.getenv(
-    'PROD_ORIGIN')], async_mode='gevent', logger=True, message_queue=os.getenv('REDIS_URL_DEV'))
+    'PROD_ORIGIN')], async_mode='gevent', logger=True, message_queue=os.getenv('REDIS_CLOUD_URL'))
 
-celery_app = Celery(os.getenv('CELERY_APP_NAME'), broker=os.getenv('REDIS_URL_DEV'))
+celery_app = Celery(os.getenv('CELERY_APP_NAME'), broker=os.getenv('REDIS_CLOUD_URL'))
 
 from controllers import socket_events  # nopep8

@@ -7,7 +7,8 @@ from utils.string_convertor import to_snake_case
 import os
 
 bp_c_setting = Blueprint('c_setting', __name__)
-CORS(bp_c_setting, origins=[os.getenv('DEV_ORIGIN'), os.getenv('PROD_ORIGIN')], supports_credentials=True)
+CORS(bp_c_setting, origins=[os.getenv('DEV_ORIGIN'), os.getenv(
+    'PROD_ORIGIN'), os.getenv('PROD_ORIGIN_WWW')], supports_credentials=True)
 
 
 class Api_Setting(MethodView):

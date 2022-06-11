@@ -6,7 +6,8 @@ import os
 
 
 bp_c_chat_log = Blueprint('c_chat_log', __name__)
-CORS(bp_c_chat_log, origins=[os.getenv('DEV_ORIGIN'), os.getenv('PROD_ORIGIN')], supports_credentials=True)
+CORS(bp_c_chat_log, origins=[os.getenv('DEV_ORIGIN'), os.getenv(
+    'PROD_ORIGIN'), os.getenv('PROD_ORIGIN_WWW')], supports_credentials=True)
 
 
 @bp_c_chat_log.route('/chat_log/<room_uuid>', methods=['GET'])
