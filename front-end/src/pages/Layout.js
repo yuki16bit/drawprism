@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useGetUserQuery, useLogOutUserMutation } from '../features/apiSlice';
-import { useDispatch } from 'react-redux';
-import { useLocation, matchPath } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, matchPath, useNavigate } from 'react-router';
+import { useLazyGetAllActiveRoomQuery } from '../features/apiSlice';
 import { Routes, Route, Link } from 'react-router-dom';
 import { socketIoActions } from '../features/socketIoSlice';
 import ScrollToTop from './ScrollToTop';
@@ -17,6 +18,7 @@ import { FiLinkedin, FiGithub, FiGlobe } from 'react-icons/fi';
 
 const Layout = () => {
   const dispatch = useDispatch();
+  const isConnected = useSelector((state) => state.socketIo.isConnected);
 
   const { pathname } = useLocation();
   const isRoomPath = matchPath('/room', pathname);
@@ -31,18 +33,10 @@ const Layout = () => {
   const [logOutUser] = useLogOutUserMutation();
 
   useEffect(() => {
-    dispatch(socketIoActions.startConnecting());
-  }, []);
-
-  useEffect(() => {
-    if (isGetUserLoading) {
-      console.log('Loading');
-    } else if (isGetUserSuccess) {
-      console.log(user);
-    } else if (isGetUserError) {
-      console.warn(getUserError);
+    if (isGetUserSuccess && !isConnected) {
+      dispatch(socketIoActions.startConnecting(user?.uuid));
     }
-  }, [getUserError, user, isGetUserError, isGetUserLoading, isGetUserSuccess]);
+  }, [isGetUserSuccess, isConnected]);
 
   return (
     <div
@@ -118,11 +112,11 @@ const Layout = () => {
         )}
         <ScrollToTop>
           <Routes>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<Home user={user} />} />
             <Route path='/sign' element={<SignPage />} />
-            <Route path='/setting' element={<SettingPage />} />
-            <Route path='/room' element={<RoomPage />} />
-            <Route path='/room/:roomUuid' element={<SettingPage />} />
+            <Route path='/setting' element={<SettingPage user={user} />} />
+            <Route path='/room' element={<RoomPage user={user} />} />
+            <Route path='/room/:roomUuid' element={<SettingPage user={user} />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </ScrollToTop>

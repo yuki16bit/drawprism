@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useGetUserQuery, useCreateSettingMutation } from '../features/apiSlice';
+import { useCreateSettingMutation } from '../features/apiSlice';
 import Spacer from '../components/Spacer';
 import Container from '../components/Container';
 import RoomThumbnail from '../components/RoomThumbnail';
 import DotsLoader from '../components/DotsLoader';
 
-const HomePage = () => {
+const HomePage = ({ user, activeRooms }) => {
   let navigate = useNavigate();
   const [
     createSetting,
@@ -16,13 +16,11 @@ const HomePage = () => {
       isSuccess: isCreateSettingSuccess,
     },
   ] = useCreateSettingMutation();
-  const [activeRooms, setactiveRooms] = useState([]);
   const [historyRooms, setHistoryRooms] = useState([]);
-  const { data: user } = useGetUserQuery();
 
   const createRoom = async (e) => {
     e.preventDefault();
-    createSetting(user.uuid);
+    createSetting(user?.uuid);
   };
 
   useEffect(() => {
