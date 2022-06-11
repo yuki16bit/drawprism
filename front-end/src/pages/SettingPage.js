@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useQueryString from '../custom-hooks/useQueryString';
 import {
-  useGetUserQuery,
   useGetSettingQuery,
   useDeleteSettingMutation,
   useUpdateSettingMutation,
@@ -16,7 +15,7 @@ import Divider from '../components/Divider';
 import ScreenShotThumbnail from '../components/ScreenShotThumbnail';
 import DotsLoader from '../components/DotsLoader';
 
-const SettingPage = () => {
+const SettingPage = ({ user }) => {
   const { roomUuid } = useParams();
   let queryString = useQueryString();
   let navigate = useNavigate();
@@ -43,7 +42,6 @@ const SettingPage = () => {
     isSuccess: isGetAllParticipateSuccess,
   } = useGetAllParticipateQuery(roomUuid ? roomUuid : queryString.get('room'));
 
-  const { data: user } = useGetUserQuery();
   const [isOwner, setIsOwner] = useState(false);
   const [roomName, setRoomName] = useState('');
   const [roomDescription, setRoomDescription] = useState('');
@@ -326,10 +324,14 @@ const SettingPage = () => {
                 </div>
                 <div className='mt-3 max-h-[540px] min-h-[2.5rem] grow overflow-auto rounded border bg-white px-4 py-2'>
                   {isLazyGetAllChatLogSuccess && lazyAllChatLog?.length > 0 ? (
-                    lazyAllChatLog.map((chat) => (
-                      <div key={`${chat.id}`}>
-                        <span className='font-medium text-amber-500'>{`${chat.talker} : `}</span>
-                        {chat.line}
+                    lazyAllChatLog.map((chatLine) => (
+                      <div key={`${chatLine.id}`}>
+                        {chatLine.talkerUuid !== undefined && (
+                          <span className='font-medium text-amber-500'>
+                            {`${chatLine.talkerName} (${chatLine.talkerUuid}) `}:{' '}
+                          </span>
+                        )}
+                        {chatLine.text}
                       </div>
                     ))
                   ) : (
