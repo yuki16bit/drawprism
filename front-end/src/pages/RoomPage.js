@@ -2,66 +2,69 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { socketIoActions } from '../features/socketIoSlice';
-import { useUpdateParticipateMutation } from '../features/apiSlice';
+import { useLazyGetAllChatLogQuery } from '../features/apiSlice';
 import Canvas from '../components/Canvas';
 import ToolBox from '../components/ToolBox';
 import ChatBox from '../components/ChatBox';
 
-const RoomPage = () => {
-  const dispatch = useDispatch();
-
+const RoomPage = ({ user }) => {
   const { state } = useLocation();
   let navigate = useNavigate();
 
-  const [updateParticipate] = useUpdateParticipateMutation();
+  const dispatch = useDispatch();
+  const isConnected = useSelector((state) => state.socketIo.isConnected);
+  const [getAllChatLog, { data: allChatLog, isSuccess: isAllChatLogSuccess }] =
+    useLazyGetAllChatLogQuery();
 
-  const currentParticipate = useCallback(() => {
-    return {
-      userUuid: state?.userUuid,
-      userName: state?.userName,
-      role: state?.role,
-      mode: state?.mode,
-    };
-  }, [state?.mode, state?.role, state?.userName, state?.userUuid]);
+  const currentParticipate = useCallback(
+    (action) => {
+      return {
+        roomUuid: state?.roomUuid,
+        action: action,
+        participate: {
+          userUuid: state?.userUuid,
+          userName: state?.userName,
+          role: state?.role,
+          mode: state?.mode,
+        },
+      };
+    },
+    [state]
+  );
+
+  useEffect(() => {
+    getAllChatLog(state?.roomUuid);
+  }, [getAllChatLog, state?.roomUuid]);
+
+  useEffect(() => {
+    if (isAllChatLogSuccess) {
+      dispatch(socketIoActions.addChatLog(allChatLog));
+    }
+  }, [allChatLog, dispatch, isAllChatLogSuccess]);
 
   useEffect(() => {
     if (state === null) {
       navigate('/', { replace: true });
-    } else {
-      dispatch(
-        socketIoActions.joinRoom({
-          roomUuid: state?.roomUuid,
-          participate: currentParticipate(),
-        })
-      );
-      updateParticipate({
-        roomUuid: state?.roomUuid,
-        action: 'join',
-        participate: currentParticipate(),
-      });
     }
-
-    const leave = () => {
-      dispatch(
-        socketIoActions.leaveRoom({
-          roomUuid: state?.roomUuid,
-          participate: currentParticipate(),
-        })
-      );
-      updateParticipate({
-        roomUuid: state?.roomUuid,
-        action: 'leave',
-        participate: currentParticipate(),
-      });
-    };
-
-    window.addEventListener('beforeunload', leave);
-
+    if (state !== null && isConnected && isAllChatLogSuccess) {
+      dispatch(socketIoActions.joinRoom(currentParticipate('join')));
+    }
     return () => {
-      if (state !== null) leave();
-      window.removeEventListener('beforeunload', leave);
+      if (state !== null && isConnected && isAllChatLogSuccess) {
+        dispatch(socketIoActions.leaveRoom(currentParticipate('leave')));
+      }
     };
-  }, [currentParticipate, dispatch, navigate, state, updateParticipate]);
+  }, [state, isConnected, isAllChatLogSuccess, navigate, dispatch, currentParticipate]);
+
+  useEffect(() => {
+    const handleTabClose = (e) => {
+      e.preventDefault();
+    };
+    window.addEventListener('beforeunload', handleTabClose);
+    return () => {
+      window.removeEventListener('beforeunload', handleTabClose);
+    };
+  }, []);
 
   return (
     <div className='h-[1920px] w-[3000px] bg-neutral-300'>
@@ -72,7 +75,7 @@ const RoomPage = () => {
           width={state?.canvasSize === 'square' ? 2000 : 2479}
           height={state?.canvasSize === 'square' ? 2000 : 1750}
         />
-        <ChatBox locationState={state} />
+        <ChatBox locationState={state} user={user} />
       </>
     </div>
   );
