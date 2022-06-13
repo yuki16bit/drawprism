@@ -7,6 +7,4 @@ def query_all_chat_log(room_uuid):
 
 
 def add_chat_log(room_uuid, chatting_data):
-  if 'roomUuid' in chatting_data:
-    chatting_data.pop('roomUuid')
   db.room_chat_logs.update_one({'room_uuid': room_uuid}, {'$push': {'chat_logs': chatting_data}})

@@ -23,8 +23,3 @@ def get_chat_log(room_uuid):
     abort(400, description=generate_abort_msg(e))
   except Exception as e:
     abort(500, description=generate_abort_msg(e))
-
-
-@bp_c_chat_log.route('/chat_log/<room_uuid>', methods=['POST'])
-def post_chat_log(room_uuid):
-  return jsonify({'ok': True})
