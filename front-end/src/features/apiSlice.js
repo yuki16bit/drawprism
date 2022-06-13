@@ -39,12 +39,8 @@ export const apiSlice = createApi({
       invalidatesTags: ['User'],
     }),
     getAllActiveRoom: builder.query({
-      query: () => '/api/room/active',
+      query: () => '/api/setting/room/active',
       providesTags: ['AllActiveRoom'],
-    }),
-    getAllHistoryRoom: builder.query({
-      query: () => '/api/room/history',
-      providesTags: ['AllHistoryRoom'],
     }),
     getSetting: builder.query({
       query: (roomUuid) => ({
@@ -81,6 +77,11 @@ export const apiSlice = createApi({
       transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
       providesTags: ['ChatLog'],
     }),
+    getPreviousDrawLog: builder.query({
+      query: (roomUuid) => `/api/draw_log/${roomUuid}`,
+      // transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
+      providesTags: ['DrawLog'],
+    }),
     getAllParticipate: builder.query({
       query: (roomUuid) => `/api/participate/${roomUuid}`,
       transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
@@ -108,6 +109,7 @@ export const {
   useUpdateSettingMutation,
   useDeleteSettingMutation,
   useLazyGetAllChatLogQuery,
+  useGetPreviousDrawLogQuery,
   useGetAllParticipateQuery,
   useUpdateParticipateMutation,
 } = apiSlice;

@@ -33,6 +33,10 @@ const Layout = () => {
   const [logOutUser] = useLogOutUserMutation();
 
   useEffect(() => {
+    return () => {};
+  }, []);
+
+  useEffect(() => {
     if (isGetUserSuccess && !isConnected) {
       dispatch(socketIoActions.startConnecting(user?.uuid));
     }
