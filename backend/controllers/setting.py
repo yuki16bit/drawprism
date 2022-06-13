@@ -1,7 +1,7 @@
 from flask import Blueprint, abort, jsonify, make_response, request
 from flask.views import MethodView
 from flask_cors import CORS
-from models.setting import generate_room, add_room, query_room_uuid, query_screen_shots, query_chat_logs, remove_room, update_room
+from models.setting import generate_room, add_room, query_room_uuid, query_screen_shots, query_all_active_room, remove_room, update_room
 from utils.abort_msg import generate_abort_msg
 from utils.string_convertor import to_snake_case
 import os
@@ -81,6 +81,15 @@ def delete_room(room_uuid):
       raise TypeError('Delete room failed: Must provide room uuid.')
   except TypeError as e:
     abort(400, description=generate_abort_msg(e))
+  except Exception as e:
+    abort(500, description=generate_abort_msg(e))
+
+
+@bp_c_setting.route('/setting/room/active', methods=['GET'])
+def get_all_active_room():
+  try:
+    all_active_room = query_all_active_room()
+    return make_response(jsonify(all_active_room))
   except Exception as e:
     abort(500, description=generate_abort_msg(e))
 

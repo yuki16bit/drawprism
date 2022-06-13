@@ -1,113 +1,154 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { socketIoActions } from '../features/socketIoSlice';
+import { useGetPreviousDrawLogQuery } from '../features/apiSlice';
 
 const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
   const dispatch = useDispatch();
-  const currentDrawLine = useSelector((state) => state.socketIo.currentDrawLine);
-  const currentColor = useSelector((state) => state.colorPicker.colorCode);
+  const drawingData = useSelector((state) => state.socketIo.drawingData);
+  const currentColor = useSelector((state) => state.toolBox.colorCode);
+  const currentPenSize = useSelector((state) => state.toolBox.penSize);
+
+  const {
+    data: previousDrawLog,
+    isLoading: isPreviousDrawLogLoading,
+    isSuccess: isPreviousDrawLogSuccess,
+  } = useGetPreviousDrawLogQuery(locationState?.roomUuid);
 
   const canvasRef = useRef(null);
   const context = useRef(null);
-  const [drawing, setDrawing] = useState(false);
-  const [lastX, setLastX] = useState();
-  const [lastY, setLastY] = useState();
+  const [isDown, setIsDown] = useState(false);
+  const [beginPoint, setBeginPoint] = useState({ x: null, y: null });
+  const [points, setPoints] = useState([]);
 
   useEffect(() => {
     if (canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
       context.current.fillStyle = '#ffffff';
       context.current.fillRect(0, 0, width, height);
+      context.current.lineJoin = 'round';
+      context.current.lineCap = 'round';
+      if (isPreviousDrawLogSuccess && previousDrawLog !== '') {
+        const previousCanvas = new Image();
+        previousCanvas.onload = () => {
+          context.current.drawImage(previousCanvas, 0, 0);
+        };
+        previousCanvas.src = previousDrawLog;
+      }
     }
-  }, [height, width]);
+  }, [height, isPreviousDrawLogSuccess, previousDrawLog, width]);
+
+  const getPosition = (e) => {
+    const canvasOffset = canvasRef.current.getBoundingClientRect();
+    return {
+      x:
+        e.pageX - canvasOffset.left - window.scrollX ||
+        e.touches[0].pageX - canvasOffset.left - window.scrollX,
+      y:
+        e.pageY - canvasOffset.top - window.scrollY ||
+        e.touches[0].pageY - canvasOffset.top - window.scrollY,
+    };
+  };
+
+  const getPressure = (e) => {
+    return Math.pow(e.pressure, currentPenSize) * 10;
+  };
 
   const drawLine = useCallback(
-    (beginX, beginY, endX, endY, color, emit) => {
+    (beginPoint, controlPoint, endPoint, color, lineWidth, emit) => {
       context.current.beginPath();
+      context.current.lineWidth = lineWidth;
       context.current.strokeStyle = color;
-      context.current.lineWidth = 2;
-      context.current.moveTo(beginX, beginY);
-      context.current.lineTo(endX, endY);
+      context.current.moveTo(beginPoint?.x, beginPoint?.y);
+      context.current.quadraticCurveTo(controlPoint?.x, controlPoint?.y, endPoint?.x, endPoint?.y);
       context.current.stroke();
       context.current.closePath();
 
       if (!emit) {
         return;
+      } else {
+        const canvasSnapShot = canvasRef.current.toDataURL();
+        dispatch(
+          socketIoActions.sendDraw({
+            beginPoint,
+            controlPoint,
+            endPoint,
+            color,
+            lineWidth,
+            roomUuid: locationState.roomUuid,
+            canvasSnapShot,
+          })
+        );
       }
-
-      const w = canvasRef.current.width;
-      const h = canvasRef.current.height;
-
-      dispatch(
-        socketIoActions.sendDraw({
-          beginX: beginX / w,
-          beginY: beginY / h,
-          endX: endX / w,
-          endY: endY / h,
-          currentColor: currentColor,
-          roomUuid: locationState.roomUuid,
-        })
-      );
     },
-    [currentColor, dispatch, locationState?.roomUuid]
-  );
-
-  const onReceiveDraw = useCallback(
-    (data) => {
-      const w = canvasRef.current.width;
-      const h = canvasRef.current.height;
-      drawLine(data.beginX * w, data.beginY * h, data.endX * w, data.endY * h, data.currentColor);
-    },
-    [drawLine]
+    [dispatch, locationState.roomUuid]
   );
 
   useEffect(() => {
-    onReceiveDraw(currentDrawLine);
-  }, [currentDrawLine, onReceiveDraw]);
+    const onReceiveDrawingData = (drawingData) => {
+      drawLine(
+        drawingData.beginPoint,
+        drawingData.controlPoint,
+        drawingData.endPoint,
+        drawingData.color,
+        drawingData.lineWidth
+      );
+    };
+    onReceiveDrawingData(drawingData);
+  }, [drawLine, drawingData]);
 
-  const mouseDown = (e) => {
-    const canvasOffset = canvasRef.current.getBoundingClientRect();
-    setLastX(
-      e.pageX - canvasOffset.left - window.scrollX ||
-        e.touches[0].pageX - canvasOffset.left - window.scrollX
-    );
-    setLastY(
-      e.pageY - canvasOffset.top - window.scrollY ||
-        e.touches[0].pageY - canvasOffset.top - window.scrollY
-    );
-    setDrawing(true);
+  const throttle = (callback, delay) => {
+    let previousCall = new Date().getTime();
+    return function () {
+      const time = new Date().getTime();
+      if (time - previousCall >= delay) {
+        previousCall = time;
+        callback.apply(null, arguments);
+      }
+    };
   };
 
-  const mouseMove = (e) => {
-    const canvasOffset = canvasRef.current.getBoundingClientRect();
-    if (!drawing) {
-      return;
-    }
-    drawLine(
-      lastX,
-      lastY,
-      e.pageX - canvasOffset.left - window.scrollX ||
-        e.touches[0].pageX - canvasOffset.left - window.scrollX,
-      e.pageY - canvasOffset.top - window.scrollY ||
-        e.touches[0].pageY - canvasOffset.top - window.scrollY,
-      currentColor,
-      true
-    );
-    setLastX(
-      e.pageX - canvasOffset.left - window.scrollX ||
-        e.touches[0].pageX - canvasOffset.left - window.scrollX
-    );
-    setLastY(
-      e.pageY - canvasOffset.top - window.scrollY ||
-        e.touches[0].pageY - canvasOffset.top - window.scrollY
-    );
+  const down = (e) => {
+    setIsDown(true);
+    const { x, y } = getPosition(e);
+    setPoints((prevPoints) => [...prevPoints, { x, y }]);
+    setBeginPoint((prevBeginPoint) => ({ ...prevBeginPoint, x, y }));
   };
 
-  const mouseUp = (e) => {
-    if (!drawing) {
-      return;
+  const move = (e) => {
+    if (!isDown) return;
+
+    const { x, y } = getPosition(e);
+    setPoints((prevPoints) => [...prevPoints, { x, y }]);
+
+    if (points.length > 3) {
+      const lastTwoPoints = points.slice(-2);
+      const controlPoint = lastTwoPoints[0];
+      const endPoint = {
+        x: (lastTwoPoints[0].x + lastTwoPoints[1].x) / 2,
+        y: (lastTwoPoints[0].y + lastTwoPoints[1].y) / 2,
+      };
+      const lineWidth = getPressure(e);
+      drawLine(beginPoint, controlPoint, endPoint, currentColor, lineWidth, true);
+      setBeginPoint((prevBeginPoint) => ({ ...prevBeginPoint, x: endPoint.x, y: endPoint.y }));
     }
-    setDrawing(false);
+  };
+
+  const up = (e) => {
+    if (!isDown) return;
+    const { x, y } = getPosition(e);
+    points.push({ x, y });
+
+    if (points.length > 3) {
+      const lastTwoPoints = points.slice(-2);
+      const controlPoint = lastTwoPoints[0];
+      const endPoint = lastTwoPoints[1];
+      const lineWidth = getPressure(e);
+      drawLine(beginPoint, controlPoint, endPoint, currentColor, lineWidth, true);
+    }
+    setBeginPoint((prevBeginPoint) => ({ ...prevBeginPoint, x: null, y: null }));
+    setIsDown(false);
+    setPoints([]);
   };
 
   return (
@@ -116,14 +157,10 @@ const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
       width={width}
       height={height}
       className='bg-netural-50 relative top-[40px] left-[310px] m-0 touch-none border'
-      onMouseDown={(e) => mouseDown(e)}
-      onMouseMove={(e) => mouseMove(e)}
-      onMouseUp={(e) => mouseUp(e)}
-      onMouseOut={(e) => mouseUp(e)}
-      onTouchStart={(e) => mouseDown(e)}
-      onTouchMove={(e) => mouseMove(e)}
-      onTouchEnd={(e) => mouseUp(e)}
-      onTouchCancel={(e) => mouseDown(e)}
+      onPointerDown={(e) => down(e)}
+      onPointerMove={(e) => throttle(move(e), 10)}
+      onPointerUp={(e) => throttle(up(e), 10)}
+      onPointerOut={(e) => throttle(up(e), 10)}
     />
   );
 };

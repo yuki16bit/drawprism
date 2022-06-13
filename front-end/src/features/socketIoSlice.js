@@ -6,7 +6,7 @@ export const socketIoSlice = createSlice({
     isConnected: false,
     isEstablishingConnection: false,
     chatLines: [],
-    currentDrawLine: {},
+    drawingData: {},
   },
   reducers: {
     startConnecting: (state) => {
@@ -29,13 +29,12 @@ export const socketIoSlice = createSlice({
       return;
     },
     receiveDraw: (state, action) => {
-      return { ...state, currentDrawLine: { ...action.payload } };
+      return { ...state, drawingData: { ...action.payload } };
     },
     leaveRoom: (state, action) => {
       console.log('leave room');
     },
     addChatLog: (state, action) => {
-      console.log(action.payload);
       const divideLine = {
         id: nanoid(),
         text: '—History Chat Logs—',

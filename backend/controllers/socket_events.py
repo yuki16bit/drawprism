@@ -2,7 +2,7 @@ from wsgi import socket_io
 from flask import request
 from flask_socketio import emit, join_room, leave_room
 from models.participate import join_participate, leave_participate, query_participate_request_sid
-from controllers.celery_tasks import pull_participate_after_disconnect, record_chat_log
+from controllers.celery_tasks import pull_participate_after_disconnect, record_chat_log, record_draw_log
 
 
 @socket_io.on('connect')
@@ -29,7 +29,7 @@ def new_join_room(join_data):
 
 @socket_io.on('send-chat')
 def chatting(chatting_data):
-  room_uuid = chatting_data['roomUuid']
+  room_uuid = chatting_data.pop('roomUuid')
   record_chat_log(room_uuid, chatting_data)
   emit('receive-chat', chatting_data, to=room_uuid)
 
@@ -37,6 +37,9 @@ def chatting(chatting_data):
 @socket_io.on('send-draw')
 def drawing(drawing_data):
   room_uuid = drawing_data['roomUuid']
+  canvas_sanp_shot = drawing_data['canvasSnapShot']
+  record_draw_log(room_uuid, canvas_sanp_shot)
+  drawing_data.pop('canvasSnapShot')
   emit('receive-draw', drawing_data, to=room_uuid)
 
 
