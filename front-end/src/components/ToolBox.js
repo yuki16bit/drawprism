@@ -1,7 +1,9 @@
+import { useDispatch } from 'react-redux';
+import { toolBoxActions } from '../features/toolBoxSlice';
 import Draggable from 'react-draggable';
-import ColorPicker from '../components/ColorPicker';
 
 const ToolBox = () => {
+  const dispatch = useDispatch();
   return (
     <Draggable handle='strong'>
       <div
@@ -13,14 +15,21 @@ const ToolBox = () => {
         z-10
         flex h-80 min-h-[100px] w-72
         min-w-[200px]
-        flex-col
+        touch-none flex-col
         overflow-hidden
         rounded border border-neutral-200 bg-white'
       >
-        <strong className='cursor-grab'>
-          <div className='bg-amber-500 px-2 py-1 text-white'>Tool Box</div>
+        <strong className='cursor-grab touch-none'>
+          <div className='touch-none bg-amber-500 px-2 py-1 text-white'>Tool Box</div>
         </strong>
-        <ColorPicker />
+        <section id='section-color-picker'>
+          <input
+            type='color'
+            onChange={(e) => {
+              dispatch(toolBoxActions.changeColor(`${e.target.value}`));
+            }}
+          />
+        </section>
       </div>
     </Draggable>
   );
