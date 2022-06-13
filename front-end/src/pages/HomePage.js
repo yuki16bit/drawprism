@@ -6,7 +6,7 @@ import Container from '../components/Container';
 import RoomThumbnail from '../components/RoomThumbnail';
 import DotsLoader from '../components/DotsLoader';
 
-const HomePage = ({ user, activeRooms }) => {
+const HomePage = ({ user, allActiveRoom }) => {
   let navigate = useNavigate();
   const [
     createSetting,
@@ -64,17 +64,18 @@ const HomePage = ({ user, activeRooms }) => {
       <section id='section-active-rooms'>
         <h1 className='mb-10 text-center text-4xl font-bold'>Rooms</h1>
         <div className='flex flex-wrap justify-center gap-y-8 lg:gap-y-10'>
-          {activeRooms?.length > 0 ? (
-            activeRooms.map((activeRoom, index) => (
+          {allActiveRoom?.length > 0 ? (
+            allActiveRoom.map((activeRoom, index) => (
               <RoomThumbnail
-                key={activeRoom.roomID}
+                key={activeRoom.room_uuid}
                 className={`${
-                  activeRooms.length > 3 && activeRooms.length - 1 === index
+                  allActiveRoom.length > 3 && allActiveRoom.length - 1 === index
                     ? 'mr-auto lg:mr-auto'
                     : null
                 } relative mx-2 aspect-[1.414/1] basis-full cursor-pointer overflow-hidden rounded border border-amber-500 bg-white sm:basis-[calc(50%-1rem)] lg:mx-5 lg:basis-[calc(33.3%-2.5rem)]`}
                 roomIndex={index}
-                roomName={activeRoom.roomName}
+                roomName={activeRoom.room_name}
+                roomUuid={activeRoom.room_uuid}
               />
             ))
           ) : (
