@@ -67,7 +67,7 @@ const RoomPage = ({ user }) => {
   }, []);
 
   return (
-    <div className='h-[1920px] w-[3000px] bg-neutral-300'>
+    <div className='h-[1920px] w-[3000px] touch-none bg-neutral-300'>
       <>
         <ToolBox />
         <Canvas

@@ -38,15 +38,15 @@ const ChatBox = ({ locationState, user }) => {
         z-10
         flex
         h-80 min-h-[100px] w-72 min-w-[200px]
-        resize
+        touch-none resize
         flex-col
         overflow-hidden
         rounded border border-neutral-200 bg-white'
       >
-        <strong className='cursor-grab'>
+        <strong className='cursor-grab touch-none'>
           <div className='touch-none bg-amber-500 px-2 py-1 text-white'>Chat Box</div>
         </strong>
-        <div className='flex h-8'>
+        <div className='flex h-8 touch-none'>
           <input
             name='chat-typing-text'
             type='text'
@@ -57,7 +57,7 @@ const ChatBox = ({ locationState, user }) => {
             onKeyDown={onKeyDownInput}
           />
         </div>
-        <div className='h-full overflow-y-scroll p-2'>
+        <div className='h-full touch-none overflow-y-scroll p-2'>
           {chatLines?.length > 0 &&
             chatLines.map((chatLine) => (
               <div key={chatLine.id} className='mb-1'>
