@@ -22,11 +22,13 @@ def generate_room(owner_uuid):
 def add_room(room):
   db.rooms.insert_one(room)
   db.room_participates.insert_one(
-      {'room_uuid': room['room_uuid'], 'participates': []})
+      {'room_uuid': room['room_uuid'], 'participates': [], 'participated': []})
   db.room_screen_shots.insert_one(
       {'room_uuid': room['room_uuid'], 'screen_shots': []})
   db.room_chat_logs.insert_one(
       {'room_uuid': room['room_uuid'], 'chat_logs': []})
+  db.room_draw_logs.insert_one(
+      {'room_uuid': room['room_uuid'], 'draw_logs': []})
 
 
 def query_room_uuid(room_uuid):
@@ -46,6 +48,14 @@ def update_room(updates):
       {'room_uuid': updates['room_uuid']},
       {'$set': updates}
   )
+
+
+def query_all_active_room():
+  cursor = db.rooms.find({'is_active': True}, {'_id': False})
+  all_active_room = []
+  for result in cursor:
+    all_active_room.append(result)
+  return all_active_room
 
 
 def remove_room(room_uuid):
