@@ -11,6 +11,7 @@ const socketEvents = {
   joinRoom: 'join-room',
   leaveRoom: 'leave-room',
   sendDraw: 'send-draw',
+  saveDraw: 'save-draw',
   receiveDraw: 'receive-draw',
   sendChat: 'send-chat',
   receiveChat: 'receive-chat',
@@ -51,6 +52,9 @@ const socketIoMiddleware = (store) => {
     }
     if (socketIoActions.sendDraw.match(action) && isConnectionEstablished) {
       socket.emit(socketEvents.sendDraw, action.payload);
+    }
+    if (socketIoActions.saveDraw.match(action) && isConnectionEstablished) {
+      socket.emit(socketEvents.saveDraw, action.payload);
     }
     if (socketIoActions.leaveRoom.match(action) && isConnectionEstablished) {
       socket.emit(socketEvents.leaveRoom, action.payload);

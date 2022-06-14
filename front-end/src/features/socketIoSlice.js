@@ -16,10 +16,10 @@ export const socketIoSlice = createSlice({
       return { ...state, isConnected: true, isEstablishingConnection: false };
     },
     joinRoom: (state, action) => {
-      console.log('join room');
+      return;
     },
     sendChat: (state, action) => {
-      console.log('send chat');
+      return;
     },
     receiveChat: (state, action) => {
       const newLine = { id: nanoid(), ...action.payload };
@@ -28,11 +28,14 @@ export const socketIoSlice = createSlice({
     sendDraw: () => {
       return;
     },
+    saveDraw: () => {
+      return;
+    },
     receiveDraw: (state, action) => {
       return { ...state, drawingData: { ...action.payload } };
     },
     leaveRoom: (state, action) => {
-      console.log('leave room');
+      return;
     },
     addChatLog: (state, action) => {
       const divideLine = {
