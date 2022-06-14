@@ -72,8 +72,8 @@ const RoomPage = ({ user }) => {
         <ToolBox />
         <Canvas
           locationState={state}
-          width={state?.canvasSize === 'square' ? 2000 : 2479}
-          height={state?.canvasSize === 'square' ? 2000 : 1750}
+          width={state?.canvasSize === 'square' ? 1000 : 1748}
+          height={state?.canvasSize === 'square' ? 1000 : 1240}
         />
         <ChatBox locationState={state} user={user} />
       </>

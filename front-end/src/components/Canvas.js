@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { socketIoActions } from '../features/socketIoSlice';
-import { useGetPreviousDrawLogQuery } from '../features/apiSlice';
+import { useLazyGetPreviousDrawLogQuery } from '../features/apiSlice';
+import DotsLoader from './DotsLoader';
 
 const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
   const dispatch = useDispatch();
@@ -9,17 +10,24 @@ const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
   const currentColor = useSelector((state) => state.toolBox.colorCode);
   const currentPenSize = useSelector((state) => state.toolBox.penSize);
 
-  const {
-    data: previousDrawLog,
-    isLoading: isPreviousDrawLogLoading,
-    isSuccess: isPreviousDrawLogSuccess,
-  } = useGetPreviousDrawLogQuery(locationState?.roomUuid);
+  const [
+    getPreviousDrawLog,
+    {
+      data: previousDrawLog,
+      isLoading: isPreviousDrawLogLoading,
+      isSuccess: isPreviousDrawLogSuccess,
+    },
+  ] = useLazyGetPreviousDrawLogQuery();
 
   const canvasRef = useRef(null);
   const context = useRef(null);
   const [isDown, setIsDown] = useState(false);
   const [beginPoint, setBeginPoint] = useState({ x: null, y: null });
   const [points, setPoints] = useState([]);
+
+  useEffect(() => {
+    getPreviousDrawLog(locationState?.roomUuid);
+  }, [getPreviousDrawLog, locationState?.roomUuid]);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -51,7 +59,7 @@ const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
   };
 
   const getPressure = (e) => {
-    return Math.pow(e.pressure, currentPenSize) * 10;
+    return Math.pow(e.pressure, 2) * currentPenSize;
   };
 
   const drawLine = useCallback(
@@ -66,20 +74,18 @@ const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
 
       if (!emit) {
         return;
-      } else {
-        const canvasSnapShot = canvasRef.current.toDataURL();
-        dispatch(
-          socketIoActions.sendDraw({
-            beginPoint,
-            controlPoint,
-            endPoint,
-            color,
-            lineWidth,
-            roomUuid: locationState.roomUuid,
-            canvasSnapShot,
-          })
-        );
       }
+
+      dispatch(
+        socketIoActions.sendDraw({
+          beginPoint,
+          controlPoint,
+          endPoint,
+          color,
+          lineWidth,
+          roomUuid: locationState.roomUuid,
+        })
+      );
     },
     [dispatch, locationState.roomUuid]
   );
@@ -149,19 +155,28 @@ const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
     setBeginPoint((prevBeginPoint) => ({ ...prevBeginPoint, x: null, y: null }));
     setIsDown(false);
     setPoints([]);
+    dispatch(
+      socketIoActions.saveDraw({
+        roomUuid: locationState.roomUuid,
+        canvasSnapShot: canvasRef.current.toDataURL(),
+      })
+    );
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={width}
-      height={height}
-      className='bg-netural-50 relative top-[40px] left-[310px] m-0 touch-none border'
-      onPointerDown={(e) => down(e)}
-      onPointerMove={(e) => throttle(move(e), 10)}
-      onPointerUp={(e) => throttle(up(e), 10)}
-      onPointerOut={(e) => throttle(up(e), 10)}
-    />
+    <>
+      {isPreviousDrawLogLoading && <DotsLoader dotSize='4' />}
+      <canvas
+        ref={canvasRef}
+        width={width}
+        height={height}
+        className='bg-netural-50 relative top-[40px] left-[310px] m-0 touch-none border'
+        onPointerDown={(e) => down(e)}
+        onPointerMove={(e) => throttle(move(e), 10)}
+        onPointerUp={(e) => throttle(up(e), 10)}
+        onPointerOut={(e) => throttle(up(e), 10)}
+      />
+    </>
   );
 };
 

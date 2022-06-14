@@ -1,8 +1,12 @@
-import { useEffect } from 'react';
-import { useGetUserQuery, useLogOutUserMutation } from '../features/apiSlice';
+import { useEffect, useState } from 'react';
+import {
+  useGetUserQuery,
+  useLogOutUserMutation,
+  useGetAllActiveRoomQuery,
+  useLazyGetPreviousDrawLogQuery,
+} from '../features/apiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, matchPath, useNavigate } from 'react-router';
-import { useLazyGetAllActiveRoomQuery } from '../features/apiSlice';
 import { Routes, Route, Link } from 'react-router-dom';
 import { socketIoActions } from '../features/socketIoSlice';
 import ScrollToTop from './ScrollToTop';
@@ -32,9 +36,8 @@ const Layout = () => {
   } = useGetUserQuery();
   const [logOutUser] = useLogOutUserMutation();
 
-  useEffect(() => {
-    return () => {};
-  }, []);
+  const { data: allActiveRoom, isSuccess: isLazyGetAllActiveRoomSuccess } =
+    useGetAllActiveRoomQuery(null, { pollingInterval: 10000 });
 
   useEffect(() => {
     if (isGetUserSuccess && !isConnected) {
@@ -70,7 +73,9 @@ const Layout = () => {
             </h2>
             <ul className='ml-auto mr-[25px] flex h-[4.75rem] w-fit items-center gap-12'>
               <li className='mt-4 rounded px-2 py-1 font-medium tracking-wide text-neutral-600'>
-                <span>Active Room : 0</span>
+                <span>
+                  Active Room :{isLazyGetAllActiveRoomSuccess ? ` ${allActiveRoom.length}` : ' 0'}
+                </span>
               </li>
               <li className='mt-4 font-medium tracking-wide text-neutral-600'>
                 {isGetUserLoading ? (
@@ -116,7 +121,7 @@ const Layout = () => {
         )}
         <ScrollToTop>
           <Routes>
-            <Route path='/' element={<Home user={user} />} />
+            <Route path='/' element={<Home user={user} allActiveRoom={allActiveRoom} />} />
             <Route path='/sign' element={<SignPage />} />
             <Route path='/setting' element={<SettingPage user={user} />} />
             <Route path='/room' element={<RoomPage user={user} />} />

@@ -37,10 +37,14 @@ def chatting(chatting_data):
 @socket_io.on('send-draw')
 def drawing(drawing_data):
   room_uuid = drawing_data['roomUuid']
-  canvas_sanp_shot = drawing_data['canvasSnapShot']
-  record_draw_log(room_uuid, canvas_sanp_shot)
-  drawing_data.pop('canvasSnapShot')
   emit('receive-draw', drawing_data, to=room_uuid)
+
+
+@socket_io.on('save-draw')
+def save_drawing(drawing_data):
+  room_uuid = drawing_data['roomUuid']
+  canvas_snap_shot = drawing_data['canvasSnapShot']
+  record_draw_log(room_uuid, canvas_snap_shot)
 
 
 @socket_io.on('leave-room')
