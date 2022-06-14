@@ -3,6 +3,7 @@ import {
   useGetUserQuery,
   useLogOutUserMutation,
   useGetAllActiveRoomQuery,
+  useLazyGetPreviousDrawLogQuery,
 } from '../features/apiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, matchPath, useNavigate } from 'react-router';

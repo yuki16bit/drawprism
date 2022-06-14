@@ -6,6 +6,7 @@ import {
   useUpdateSettingMutation,
   useLazyGetAllChatLogQuery,
   useGetAllParticipateQuery,
+  useGetPreviousDrawLogQuery,
 } from '../features/apiSlice';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Spacer from '../components/Spacer';
@@ -25,9 +26,12 @@ const SettingPage = ({ user }) => {
     isLoading: isGetSettingLoading,
     isSuccess: isGetSettingSuccess,
   } = useGetSettingQuery(roomUuid ? roomUuid : queryString.get('room'));
+
   const [deleteSetting, { isLoading: isDeleteSettingLoading, isSuccess: isDeleteSettingSuccess }] =
     useDeleteSettingMutation();
+
   const [updateSetting, { isLoading: isUpdateSettingLoading }] = useUpdateSettingMutation();
+
   const [
     getAllChatLog,
     {
@@ -36,6 +40,13 @@ const SettingPage = ({ user }) => {
       isSuccess: isLazyGetAllChatLogSuccess,
     },
   ] = useLazyGetAllChatLogQuery();
+
+  const {
+    data: previousDrawLog,
+    isLoading: isPreviousDrawLogLoading,
+    isSuccess: isPreviousDrawLogSuccess,
+  } = useGetPreviousDrawLogQuery(roomUuid ? roomUuid : queryString.get('room'));
+
   const {
     data: allParticipate,
     isLoading: isGetAllParticipateLoading,
@@ -48,8 +59,9 @@ const SettingPage = ({ user }) => {
   const [canvasSize, setCanvasSize] = useState('');
 
   const calcCanvasSizeNum = (canvasSize) => {
-    return canvasSize === 'square' ? '2000 × 2000' : '2479 × 1750';
+    return canvasSize === 'square' ? '1000 × 1000' : '1748 × 1240';
   };
+
   const lazyRequestAllChatLog = () => {
     getAllChatLog(setting?.roomUuid);
   };
@@ -97,8 +109,8 @@ const SettingPage = ({ user }) => {
                 roomIndex={setting?.canvasSize ? calcCanvasSizeNum(setting.canvasSize) : '—'}
                 roomName={setting?.roomName ? setting.roomName : 'room @ —'}
                 thumbnail={
-                  setting?.thumbnail
-                    ? 'https://d65y90rhb79bo.cloudfront.net/msgboard/raychan-KbiV1er60Wk-unsplash.jpg'
+                  previousDrawLog
+                    ? previousDrawLog
                     : `${process.env.PUBLIC_URL}/images/thumbnail-room-empty.png`
                 }
               />
@@ -173,22 +185,22 @@ const SettingPage = ({ user }) => {
                     className='h-4 w-4 bg-white text-amber-500 accent-amber-600'
                   />
                   <label htmlFor='radio-square' className='ml-2'>
-                    2000 × 2000 (Square)
+                    1000 × 1000 (Square)
                   </label>
                 </div>
                 <div className='flex items-center'>
                   <input
-                    id='radio-a5'
+                    id='radio-a6'
                     type='radio'
-                    value='a5'
-                    checked={canvasSize === 'a5'}
-                    onChange={() => setCanvasSize('a5')}
+                    value='a6'
+                    checked={canvasSize === 'a6'}
+                    onChange={() => setCanvasSize('a6')}
                     disabled={!isOwner}
                     name='radio-canvas-size'
                     className='h-4 w-4 bg-white text-amber-500 accent-amber-600'
                   />
-                  <label htmlFor='radio-a5' className='ml-2'>
-                    1750 × 2479 (A5)
+                  <label htmlFor='radio-a6' className='ml-2'>
+                    1748 × 1240 (A6)
                   </label>
                 </div>
               </dd>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCreateSettingMutation } from '../features/apiSlice';
+import { useCreateSettingMutation, useGetAllPreviousDrawLogQuery } from '../features/apiSlice';
 import Spacer from '../components/Spacer';
 import Container from '../components/Container';
 import RoomThumbnail from '../components/RoomThumbnail';
@@ -16,6 +16,10 @@ const HomePage = ({ user, allActiveRoom }) => {
       isSuccess: isCreateSettingSuccess,
     },
   ] = useCreateSettingMutation();
+
+  const { data: allPreviousDrawLog, isSuccess: isGetAllPreviousDrawLogSuccess } =
+    useGetAllPreviousDrawLogQuery(null, { pollingInterval: 10000 });
+
   const [historyRooms, setHistoryRooms] = useState([]);
 
   const createRoom = async (e) => {
@@ -76,6 +80,7 @@ const HomePage = ({ user, allActiveRoom }) => {
                 roomIndex={index}
                 roomName={activeRoom.room_name}
                 roomUuid={activeRoom.room_uuid}
+                thumbnail={isGetAllPreviousDrawLogSuccess ? allPreviousDrawLog[index] : undefined}
               />
             ))
           ) : (

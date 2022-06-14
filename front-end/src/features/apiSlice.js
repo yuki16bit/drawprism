@@ -77,9 +77,12 @@ export const apiSlice = createApi({
       transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
       providesTags: ['ChatLog'],
     }),
+    getAllPreviousDrawLog: builder.query({
+      query: () => `/api/draw_log`,
+      providesTags: ['AllDrawLog'],
+    }),
     getPreviousDrawLog: builder.query({
       query: (roomUuid) => `/api/draw_log/${roomUuid}`,
-      // transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
       providesTags: ['DrawLog'],
     }),
     getAllParticipate: builder.query({
@@ -109,6 +112,7 @@ export const {
   useUpdateSettingMutation,
   useDeleteSettingMutation,
   useLazyGetAllChatLogQuery,
+  useGetAllPreviousDrawLogQuery,
   useGetPreviousDrawLogQuery,
   useLazyGetPreviousDrawLogQuery,
   useGetAllParticipateQuery,
