@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
-import { useGetUserQuery, useLogOutUserMutation } from '../features/apiSlice';
+import { useEffect, useState } from 'react';
+import {
+  useGetUserQuery,
+  useLogOutUserMutation,
+  useGetAllActiveRoomQuery,
+} from '../features/apiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, matchPath, useNavigate } from 'react-router';
-import { useLazyGetAllActiveRoomQuery } from '../features/apiSlice';
 import { Routes, Route, Link } from 'react-router-dom';
 import { socketIoActions } from '../features/socketIoSlice';
 import ScrollToTop from './ScrollToTop';
@@ -32,19 +35,8 @@ const Layout = () => {
   } = useGetUserQuery();
   const [logOutUser] = useLogOutUserMutation();
 
-  const [
-    getAllActiveRoom,
-    {
-      data: allActiveRoom,
-      isLoading: isLazyGetAllActiveRoomLoading,
-      isSuccess: isLazyGetAllActiveRoomSuccess,
-    },
-  ] = useLazyGetAllActiveRoomQuery();
-
-  useEffect(() => {
-    getAllActiveRoom();
-    return () => {};
-  }, [getAllActiveRoom]);
+  const { data: allActiveRoom, isSuccess: isLazyGetAllActiveRoomSuccess } =
+    useGetAllActiveRoomQuery(null, { pollingInterval: 10000 });
 
   useEffect(() => {
     if (isGetUserSuccess && !isConnected) {
