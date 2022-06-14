@@ -24,7 +24,6 @@ class Api_Setting(MethodView):
             'roomName': room['room_name'],
             'roomDescription': room['room_description'],
             'canvasSize': room['canvas_size'],
-            'thumbnail': room['thumbnail'],
             'isActive': room['is_active'],
             'createOn': room['create_on'],
             'lastActivity': room['last_activity'],
@@ -56,8 +55,8 @@ class Api_Setting(MethodView):
       updates = {to_snake_case(key): value for key,
                  value in request.json.items()}
       if updates['room_uuid']:
-        if updates['canvas_size'] and updates['canvas_size'] != 'square' and updates['canvas_size'] != 'a5':
-          raise TypeError('Update setting failed: Canvas size must be square or a5.')
+        if updates['canvas_size'] and updates['canvas_size'] != 'square' and updates['canvas_size'] != 'a6':
+          raise TypeError('Update setting failed: Canvas size must be square or a6.')
         if updates['room_name'] and updates['room_name'] == '':
           raise TypeError('Update setting failed: Room name must not empty.')
         if query_room_uuid(updates['room_uuid']):
