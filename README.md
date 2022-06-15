@@ -21,7 +21,11 @@
 
 #### Create a free paint chat in a second.
 
-#### No need to install Flash Player or JavaVM.
+No need to install Flash Player or JavaVM.
+
+<div align="center">
+  <img src="https://images.plurk.com/7LQoE9ZpssX3LnbPpIoaAk.gif" alt="drawprism-gif"/>
+</div>
 
 ## System Architecture
 
