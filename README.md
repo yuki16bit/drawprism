@@ -22,16 +22,7 @@
 - [Main Features](#main-features)
 - [System Architecture](#system-architecture)
 - [Backend Tech Stack](#backend-tech-stack)
-  - [Deployment](#deployment)
-  - [Environment](#environment)
-  - [Database](#database)
-  - [AWS Cloud Service (AWS)](#aws)
-  - [Authentication](#authentication)
-  - [Design Pattern](#design-pattern)
 - [Front-End Tech Stack](#front-end-tech-stack)
-  - [JavaScript](#javascript)
-  - [CSS](#css)
-  - [AJAX](#ajax)
 - [Net-working](#net-working)
 - [Version Control](#version-control)
 - [Contact](#contact)
@@ -54,6 +45,7 @@
 <div align="center">
   <img src="https://images.plurk.com/5DJ9oeugHyOgPTgaB1bG2C.gif" alt="drawprism-gif"/>
 </div
+<br />
 
 ### System Architecture <a name="system-architecture"></a>
 
@@ -64,41 +56,41 @@
 
 ### Backend Tech Stack <a name="backend-tech-stack"></a>
 
-#### Deployment <a name="deployment"></a>
+#### Deployment
 
 - Docker / docker-compose
 - gunicorn
 - gevent / gevent-websocket
 
-#### Environment <a name="environment"></a>
+#### Environment
 
 - Python / Flask
 - Flask-SocketIO
 - Celery
 - Ubuntu 20.04 (Windows Subsystem for Linux 2)
 
-#### Database <a name="database"></a>
+#### Database
 
 - MongoDB Atlas
 - Redis Enterprise Cloud
 
-#### AWS Cloud Service (AWS) <a name="aws"></a>
+#### AWS Cloud Service (AWS)
 
 - S3
 - CloudFront
 - EC2
 
-#### Authentication <a name="authentication"></a>
+#### Authentication
 
 - JSON Web Token (JWT)
 
-#### Design Pattern <a name="design-pattern"></a>
+#### Design Pattern
 
 - MVC
 
 ### Front-End Tech Stack <a name="front-end-tech-stack"></a>
 
-#### JavaScript <a name="javascript"></a>
+#### JavaScript
 
 - React.js (Hooks)
 - React Router
@@ -106,11 +98,11 @@
 - Socket.IO Client
 - Canvas API
 
-#### CSS <a name="css"></a>
+#### CSS
 
 - Tailwind CSS
 
-#### AJAX <a name="ajax"></a>
+#### AJAX
 
 - Redux Toolkit Query
 
