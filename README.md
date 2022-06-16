@@ -1,4 +1,4 @@
-# DrawPrism
+## DrawPrism
 
 <div align="center">
   <img src="https://images.plurk.com/1F7pzR5n1FL2rDYfYm6qCH.png" alt="drawprism-logo"/>
@@ -9,15 +9,15 @@
 </div>
 <br />
 
-## Live Demo
+### Live Demo
 
 - Home page: https://www.drawprism.space/
 - Anonymously, no need to register, but you still can register as a member if you'd like to ✨
 - Here I also provide a test account for you guys.
-  - User: test@user.com
+  - ID: test@user.com
   - Password: Qwert123
 
-## Table of Content
+### Table of Content
 
 - [Main Features](#main-features)
 - [System Architecture](#system-architecture)
@@ -32,68 +32,73 @@
   - [JavaScript](#javascript)
   - [CSS](#css)
   - [AJAX](#ajax)
-- [Net Working](#net-working)
+- [Net-working](#net-working)
 - [Version Control](#version-control)
 - [Contact](#contact)
 
-## Main Features <a name="main-features"></a>
+### Main Features <a name="main-features"></a>
 
-### Create a free paint chat in a second, no need to install Flash Player or JavaVM.
+#### ✨ Create a free paint chat room in a second!
+
+- After create the room, system will give you an url to invite your friends in,
+  <br />then you can drawing and chatting together, asynchronously!
+- Communication between client-side and server-side is handled through Socket.IO.
 
 <div align="center">
   <img src="https://images.plurk.com/2Hj504MVQaoTw15gCUEhn8.gif" alt="drawprism-gif"/>
 </div>
 
-### Stylus Pen Pressure Sensitive
+#### ✨ Pen Pressure Sensitive
 
+- If you draw by tablet, I have built-in support for pressure sensitivity!
 <div align="center">
   <img src="https://images.plurk.com/5DJ9oeugHyOgPTgaB1bG2C.gif" alt="drawprism-gif"/>
 </div
 
-## System Architecture <a name="system-architecture"></a>
+### System Architecture <a name="system-architecture"></a>
 
 <div align="center">
   <img src="https://images.plurk.com/7FcdiLUj3MjNzgrt6oGhps.png" alt="drawprism-architechure"/>
 </div>
 <br />
 
-## Backend Tech Stack <a name="backend-tech-stack"></a>
+### Backend Tech Stack <a name="backend-tech-stack"></a>
 
-### Deployment <a name="deployment"></a>
+#### Deployment <a name="deployment"></a>
 
 - Docker / docker-compose
 - gunicorn
 - gevent / gevent-websocket
 
-### Environment <a name="environment"></a>
+#### Environment <a name="environment"></a>
 
 - Python / Flask
 - Flask-SocketIO
 - Celery
 - Ubuntu 20.04 (Windows Subsystem for Linux 2)
 
-### Database <a name="database"></a>
+#### Database <a name="database"></a>
 
 - MongoDB Atlas
 - Redis Enterprise Cloud
 
-### AWS Cloud Service (AWS) <a name="aws"></a>
+#### AWS Cloud Service (AWS) <a name="aws"></a>
 
 - S3
 - CloudFront
 - EC2
 
-### Authentication <a name="authentication"></a>
+#### Authentication <a name="authentication"></a>
 
 - JSON Web Token (JWT)
 
-### Design Pattern <a name="design-pattern"></a>
+#### Design Pattern <a name="design-pattern"></a>
 
 - MVC
 
-## Front-End Tech Stack <a name="front-end-tech-stack"></a>
+### Front-End Tech Stack <a name="front-end-tech-stack"></a>
 
-### JavaScript <a name="javascript"></a>
+#### JavaScript <a name="javascript"></a>
 
 - React.js (Hooks)
 - React Router
@@ -101,29 +106,27 @@
 - Socket.IO Client
 - Canvas API
 
-### CSS <a name="css"></a>
+#### CSS <a name="css"></a>
 
 - Tailwind CSS
 
-### AJAX <a name="ajax"></a>
+#### AJAX <a name="ajax"></a>
 
 - Redux Toolkit Query
 
-## Net Working <a name="net-working"></a>
+### Net-working <a name="net-working"></a>
 
-### Nginx
+#### Nginx
 
 - Http & Https support
-- Domain name system
 
-## Version Control <a name="version-control"></a>
+### Version Control <a name="version-control"></a>
 
-### Git / Github
+#### Git / Github
 
-- GUI: Fork
-- GUI: Git Kraken
+- GUI: Fork / Git Kraken
 
-## Contact <a name="contact"></a>
+### Contact <a name="contact"></a>
 
 - 📲 Juri
 - 📨 sizumasa@hotmail.com
