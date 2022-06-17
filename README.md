@@ -50,7 +50,7 @@
 ### System Architecture <a name="system-architecture"></a>
 
 <div align="center">
-  <img src="https://images.plurk.com/7FcdiLUj3MjNzgrt6oGhps.png" alt="drawprism-architechure"/>
+  <img src="https://images.plurk.com/Gl17kBIGWQFEoZ7Q8Z8Du.png" alt="drawprism-architechure"/>
 </div>
 <br />
 
