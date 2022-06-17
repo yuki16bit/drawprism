@@ -213,7 +213,7 @@ const SettingPage = ({ user }) => {
                   <span className='text-blue-500 underline transition hover:text-blue-700'>
                     {process.env.REACT_APP_ENV !== 'production'
                       ? `http://127.0.0.1:3000/room/${setting?.roomUuid}`
-                      : `https://drawprism.space/${setting?.roomUuid}`}
+                      : `https://drawprism.space/room/${setting?.roomUuid}`}
                   </span>
                 </Link>
               </dd>
