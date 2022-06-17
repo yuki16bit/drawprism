@@ -10,7 +10,6 @@ def generate_room(owner_uuid):
       'room_uuid': room_uuid,
       'room_name': 'room @ ' + room_uuid,
       'room_description': '',
-      'thumbnail': '',
       'canvas_size': 'square',
       'is_active': False,
       'create_on': datetime.utcnow(),
@@ -28,7 +27,7 @@ def add_room(room):
   db.room_chat_logs.insert_one(
       {'room_uuid': room['room_uuid'], 'chat_logs': []})
   db.room_draw_logs.insert_one(
-      {'room_uuid': room['room_uuid'], 'draw_logs': []})
+      {'room_uuid': room['room_uuid'], 'draw_logs': ''})
 
 
 def query_room_uuid(room_uuid):
@@ -56,6 +55,16 @@ def query_all_active_room():
   for result in cursor:
     all_active_room.append(result)
   return all_active_room
+
+
+def query_all_owned_room(user_uuid):
+  cursor_room = db.rooms.find({'owner_uuid': user_uuid}, {'_id': False})
+  all_owned_room = []
+  for result in cursor_room:
+    room_draw_log = db.room_draw_logs.find_one({'room_uuid': result['room_uuid']}, {'_id': False})
+    result['draw_log'] = room_draw_log['draw_logs']
+    all_owned_room.append(result)
+  return all_owned_room
 
 
 def remove_room(room_uuid):
