@@ -12,6 +12,8 @@ module.exports = {
       backgroundImage: {
         'image-base': 'url("../public/images/bg-full.jpg")',
         'image-circle': 'url("../public/images/bg-circle.png")',
+        'image-camera': 'url("../public/images/icon-camera.png")',
+        'image-eraser': 'url("../public/images/icon-eraser.png")',
       },
       keyframes: {
         'dot-flashing': {
