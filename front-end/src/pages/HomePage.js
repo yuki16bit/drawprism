@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCreateSettingMutation, useGetAllPreviousDrawLogQuery } from '../features/apiSlice';
+import {
+  useCreateSettingMutation,
+  useGetAllPreviousDrawLogQuery,
+  useGetAllActiveRoomQuery,
+} from '../features/apiSlice';
 import Spacer from '../components/Spacer';
 import Container from '../components/Container';
 import RoomThumbnail from '../components/RoomThumbnail';
 import DotsLoader from '../components/DotsLoader';
 
-const HomePage = ({ user, allActiveRoom }) => {
-  let navigate = useNavigate();
+const HomePage = ({ user }) => {
+  const navigate = useNavigate();
   const [
     createSetting,
     {
@@ -17,10 +21,11 @@ const HomePage = ({ user, allActiveRoom }) => {
     },
   ] = useCreateSettingMutation();
 
+  const { data: allActiveRoom, isSuccess: isLazyGetAllActiveRoomSuccess } =
+    useGetAllActiveRoomQuery(null, { pollingInterval: 10000 });
+
   const { data: allPreviousDrawLog, isSuccess: isGetAllPreviousDrawLogSuccess } =
     useGetAllPreviousDrawLogQuery(null, { pollingInterval: 10000 });
-
-  const [historyRooms, setHistoryRooms] = useState([]);
 
   const createRoom = async (e) => {
     e.preventDefault();
@@ -55,18 +60,21 @@ const HomePage = ({ user, allActiveRoom }) => {
       <section id='section-slogan' className='mt-40 mb-20'>
         <h1 className='text-center text-4xl font-bold'>Drawing and Chatting with friends!</h1>
         <h3 className='mt-6 text-center text-xl font-medium'>
-          Create a free drawing chat in a second ✨
+          Create a free paint chat room in a second ✨
         </h3>
         <h3 className='mt-2 text-center text-xl font-medium'>
-          Anonymously, but still can sign up if you'd like to.
+          Anonymously, no registration needed but still can sign up if you'd like to.
         </h3>
         <h3 className='mt-2 text-center text-xl font-medium'>
-          Works only with a browser. No need Flash Player or JavaVM.
+          Communication between client-side and server-side is handled through Socket.IO.
         </h3>
       </section>
       {/* Active Rooms Section */}
       <section id='section-active-rooms'>
-        <h1 className='mb-10 text-center text-4xl font-bold'>Rooms</h1>
+        <h1 className='text-center text-4xl font-bold'>Rooms</h1>
+        <p className='mt-3 mb-10 text-center text-sm font-medium'>
+          Active Rooms :{isLazyGetAllActiveRoomSuccess ? ` ${allActiveRoom.length}` : ' 0'}
+        </p>
         <div className='flex flex-wrap justify-center gap-y-8 lg:gap-y-10'>
           {allActiveRoom?.length > 0 ? (
             allActiveRoom.map((activeRoom, index) => (
@@ -77,7 +85,7 @@ const HomePage = ({ user, allActiveRoom }) => {
                     ? 'mr-auto lg:mr-auto'
                     : null
                 } relative mx-2 aspect-[1.414/1] basis-full cursor-pointer overflow-hidden rounded border border-amber-500 bg-white sm:basis-[calc(50%-1rem)] lg:mx-5 lg:basis-[calc(33.3%-2.5rem)]`}
-                roomIndex={index}
+                roomIndex={`${index + 1}`}
                 roomName={activeRoom.room_name}
                 roomUuid={activeRoom.room_uuid}
                 thumbnail={isGetAllPreviousDrawLogSuccess ? allPreviousDrawLog[index] : undefined}
@@ -92,34 +100,6 @@ const HomePage = ({ user, allActiveRoom }) => {
                 There's no room yet, <br />
                 press plus button to create one.
               </p>
-            </div>
-          )}
-        </div>
-      </section>
-      <Spacer width='w-24' height='h-24' minWidth='min-w-full' minHeight='min-h-full' />
-      {/* History Rooms Section */}
-      <section id='section-history-rooms'>
-        <h1 className='mb-10 text-center text-4xl font-bold'>History</h1>
-        <div className='flex flex-wrap justify-center gap-y-8 lg:gap-y-10'>
-          {historyRooms?.length > 0 ? (
-            historyRooms.map((historyRoom, index) => (
-              <RoomThumbnail
-                key={historyRoom.roomID}
-                className={`${
-                  historyRooms.length > 3 && historyRooms.length - 1 === index
-                    ? 'mr-auto lg:mr-auto'
-                    : null
-                } relative mx-2 aspect-[1.414/1] basis-full cursor-pointer overflow-hidden rounded border border-amber-500 bg-white sm:basis-[calc(50%-1rem)] lg:mx-5 lg:basis-[calc(33.3%-2.5rem)]`}
-                roomIndex={index}
-                roomName={historyRoom.roomName}
-              />
-            ))
-          ) : (
-            <div className='flex aspect-[1.414/1] basis-full flex-col items-center justify-center overflow-hidden rounded border border-amber-500 bg-white sm:basis-[calc(50%-1rem)] lg:basis-[calc(33.3%-2.5rem)]'>
-              <p className='h-10 w-10 rounded-full bg-amber-500 text-center font-bold leading-10 text-white transition hover:bg-amber-600'>
-                ×
-              </p>
-              <p className='mt-3 text-center'>You haven't participate a room yet.</p>
             </div>
           )}
         </div>

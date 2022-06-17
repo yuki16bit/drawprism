@@ -1,12 +1,7 @@
-import { useEffect, useState } from 'react';
-import {
-  useGetUserQuery,
-  useLogOutUserMutation,
-  useGetAllActiveRoomQuery,
-  useLazyGetPreviousDrawLogQuery,
-} from '../features/apiSlice';
+import { useEffect } from 'react';
+import { useGetUserQuery, useLogOutUserMutation } from '../features/apiSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, matchPath, useNavigate } from 'react-router';
+import { useLocation, matchPath } from 'react-router';
 import { Routes, Route, Link } from 'react-router-dom';
 import { socketIoActions } from '../features/socketIoSlice';
 import ScrollToTop from './ScrollToTop';
@@ -14,6 +9,7 @@ import Home from './HomePage';
 import SignPage from './SignPage';
 import RoomPage from './RoomPage';
 import SettingPage from './SettingPage';
+import ProfilePage from './ProfilePage';
 import NotFoundPage from './NotFoundPage';
 import Container from '../components/Container';
 import Spacer from '../components/Spacer';
@@ -35,9 +31,6 @@ const Layout = () => {
     error: getUserError,
   } = useGetUserQuery();
   const [logOutUser] = useLogOutUserMutation();
-
-  const { data: allActiveRoom, isSuccess: isLazyGetAllActiveRoomSuccess } =
-    useGetAllActiveRoomQuery(null, { pollingInterval: 10000 });
 
   useEffect(() => {
     if (isGetUserSuccess && !isConnected) {
@@ -62,21 +55,14 @@ const Layout = () => {
                 <li>DrawPrism</li>
               </ExternalLink>
             </div>
-            <li>👥123</li>
-            <li className='underline'>Room Info</li>
-            <li className='underline'>Reset Windows</li>
+            <li className='mr-1 underline'>Room Info</li>
           </ul>
         ) : (
           <>
             <h2 className='fixed top-[25px] left-[32px] z-20 text-2xl font-medium '>
               <Link to='/'>Home</Link>
             </h2>
-            <ul className='ml-auto mr-[25px] flex h-[4.75rem] w-fit items-center gap-12'>
-              <li className='mt-4 rounded px-2 py-1 font-medium tracking-wide text-neutral-600'>
-                <span>
-                  Active Room :{isLazyGetAllActiveRoomSuccess ? ` ${allActiveRoom.length}` : ' 0'}
-                </span>
-              </li>
+            <ul className='ml-auto mr-[25px] flex h-[4.75rem] w-fit items-center gap-6'>
               <li className='mt-4 font-medium tracking-wide text-neutral-600'>
                 {isGetUserLoading ? (
                   <p>isLoading</p>
@@ -93,8 +79,8 @@ const Layout = () => {
                     </>
                   ) : (
                     <>
-                      <Link to='/member'>
-                        <span className='underline'>Member</span>
+                      <Link to='/profile'>
+                        <span className='underline'>Profile</span>
                       </Link>
                       {' / '}
                       <button
@@ -121,11 +107,12 @@ const Layout = () => {
         )}
         <ScrollToTop>
           <Routes>
-            <Route path='/' element={<Home user={user} allActiveRoom={allActiveRoom} />} />
+            <Route path='/' element={<Home user={user} />} />
             <Route path='/sign' element={<SignPage />} />
             <Route path='/setting' element={<SettingPage user={user} />} />
             <Route path='/room' element={<RoomPage user={user} />} />
             <Route path='/room/:roomUuid' element={<SettingPage user={user} />} />
+            <Route path='/profile' element={<ProfilePage user={user} />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </ScrollToTop>
