@@ -9,7 +9,7 @@ import ChatBox from '../components/ChatBox';
 
 const RoomPage = ({ user }) => {
   const { state } = useLocation();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const isConnected = useSelector((state) => state.socketIo.isConnected);
