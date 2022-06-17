@@ -68,6 +68,7 @@ const SignPage = () => {
         <form onSubmit={signUser}>
           {signMode === 'up' && (
             <div className='mb-6'>
+              <label className='text-sm text-neutral-600'>Accept only alphabets.</label>
               <input
                 type='text'
                 placeholder='Name'
@@ -87,6 +88,9 @@ const SignPage = () => {
             />
           </div>
           <div className='mb-6'>
+            <label className='text-sm text-neutral-600'>
+              8 to 16 characters with at least 1 digit, 1 uppercase and 1 lowercsase.
+            </label>
             <input
               type='password'
               placeholder='Password'
