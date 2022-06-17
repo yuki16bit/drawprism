@@ -18,8 +18,8 @@ import DotsLoader from '../components/DotsLoader';
 
 const SettingPage = ({ user }) => {
   const { roomUuid } = useParams();
-  let queryString = useQueryString();
-  let navigate = useNavigate();
+  const queryString = useQueryString();
+  const navigate = useNavigate();
 
   const {
     data: setting,
@@ -41,17 +41,20 @@ const SettingPage = ({ user }) => {
     },
   ] = useLazyGetAllChatLogQuery();
 
-  const {
-    data: previousDrawLog,
-    isLoading: isPreviousDrawLogLoading,
-    isSuccess: isPreviousDrawLogSuccess,
-  } = useGetPreviousDrawLogQuery(roomUuid ? roomUuid : queryString.get('room'));
+  const { data: previousDrawLog } = useGetPreviousDrawLogQuery(
+    roomUuid ? roomUuid : queryString.get('room'),
+    {
+      pollingInterval: 10000,
+    }
+  );
 
   const {
     data: allParticipate,
     isLoading: isGetAllParticipateLoading,
     isSuccess: isGetAllParticipateSuccess,
-  } = useGetAllParticipateQuery(roomUuid ? roomUuid : queryString.get('room'));
+  } = useGetAllParticipateQuery(roomUuid ? roomUuid : queryString.get('room'), {
+    pollingInterval: 10000,
+  });
 
   const [isOwner, setIsOwner] = useState(false);
   const [roomName, setRoomName] = useState('');
