@@ -42,7 +42,7 @@
 #### ✨ Pen Pressure Sensitive
 
 - If you draw by tablet, I have built-in support for pressure sensitivity!
-<div align="center">
+<div align="left">
   <img src="https://images.plurk.com/5DJ9oeugHyOgPTgaB1bG2C.gif" alt="drawprism-gif"/>
 </div
 <br />
@@ -63,7 +63,7 @@
 - Flask-SocketIO
 - Celery
 - MongoDB Atlas
-- Redis Enterprise Cloud
+- AWS ElastiCache for Redis
 - AWS S3
 - AWS CloudFront
 - AWS EC2
@@ -75,11 +75,10 @@
 
 - React.js (Hooks)
 - React Router
-- Redux Toolkit
+- Redux Toolkit / RTK Query
 - Socket.IO Client
-- Canvas API
+- Html Canvas API
 - Tailwind CSS
-- Redux Toolkit Query
 
 ### Net-working <a name="net-working"></a>
 
