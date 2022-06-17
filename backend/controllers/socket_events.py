@@ -1,8 +1,11 @@
 from wsgi import socket_io
+from datetime import datetime
 from flask import request
+from models.setting import update_room
 from flask_socketio import emit, join_room, leave_room
-from models.participate import join_participate, leave_participate, query_participate_request_sid
+from models.participate import join_participate, leave_participate, query_all_participate, query_participate_request_sid
 from controllers.celery_tasks import pull_participate_after_disconnect, record_chat_log, record_draw_log
+import os
 
 
 @socket_io.on('connect')
@@ -19,6 +22,9 @@ def new_join_room(join_data):
       'text': f" ({join_data['participate']['role']}, {join_data['participate']['mode']}) has joined this room."
   }
   if join_data['action'] == 'join':
+    current_all_participate = query_all_participate(room_uuid)
+    if len(current_all_participate['participates']) <= 0:
+      update_room({'room_uuid': room_uuid, 'is_active': True, 'last_activity': datetime.utcnow()})
     join_participate({'room_uuid': room_uuid, 'participate': {
                      **join_data['participate'], 'room_uuid': room_uuid, 'request_sid': request.sid}})
 
@@ -56,8 +62,13 @@ def old_leave_room(leave_data):
       'text': f"({leave_data['participate']['role']}, {leave_data['participate']['mode']}) has left this room."
   }
   if leave_data['action'] == 'leave':
+    current_all_participate = query_all_participate(room_uuid)
+    if len(current_all_participate['participates']) - 1 <= 0:
+      active = True if (room_uuid == os.getenv('ACTIVE_ROOM_DEV') or room_uuid == os.getenv('ACTIVE_ROOM_ONE')
+                        or room_uuid == os.getenv('ACTIVE_ROOM_TWO')) else False
+      update_room({'room_uuid': room_uuid, 'is_active': active, 'last_activity': datetime.utcnow()})
     leave_participate({'room_uuid': room_uuid, 'participate': {
-        **leave_data['participate'], 'room_uuid': room_uuid, 'request_sid': request.sid}})
+                      **leave_data['participate'], 'room_uuid': room_uuid, 'request_sid': request.sid}})
   leave_room(room_uuid)
   record_chat_log(room_uuid, leave_message)
   emit('leave-room', leave_message, to=room_uuid)

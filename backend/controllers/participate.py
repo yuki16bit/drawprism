@@ -24,35 +24,3 @@ def get_all_participate(room_uuid):
     abort(400, description=generate_abort_msg(e))
   except Exception as e:
     abort(500, description=generate_abort_msg(e))
-
-
-@bp_c_participate.route('/participate/<room_uuid>', methods=['PATCH'])
-def update_participate(room_uuid):
-  try:
-    updates = {to_snake_case(key): value for key, value in request.json.items()}
-    if room_uuid:
-      current_all_participate = query_all_participate(room_uuid)
-
-      if updates['action'] and updates['action'] == 'join':
-        if len(current_all_participate['participates']) <= 0:
-          update_room({'room_uuid': room_uuid, 'is_active': True, 'last_activity': datetime.utcnow()})
-        join_participate({'room_uuid': room_uuid, 'participate': updates['participate']})
-
-      elif updates['action'] and updates['action'] == 'leave':
-        if len(current_all_participate['participates']) - 1 <= 0:
-          active = True if (room_uuid == os.getenv('ACTIVE_ROOM_DEV') or room_uuid == os.getenv('ACTIVE_ROOM_ONE') or room_uuid ==
-                            os.getenv('ACTIVE_ROOM_TWO')) else False
-          update_room({'room_uuid': room_uuid, 'is_active': active, 'last_activity': datetime.utcnow()})
-        leave_participate({'room_uuid': room_uuid, 'participate': updates['participate']})
-
-      else:
-        raise TypeError('Get participate failed: No update action or invalid update action.')
-
-      return jsonify({'ok': True})
-
-    else:
-      raise TypeError('Get participate failed: Must provide room uuid.')
-  except TypeError as e:
-    abort(400, description=generate_abort_msg(e))
-  except Exception as e:
-    abort(500, description=generate_abort_msg(e))
