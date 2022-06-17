@@ -42,6 +42,10 @@ export const apiSlice = createApi({
       query: () => '/api/setting/room/active',
       providesTags: ['AllActiveRoom'],
     }),
+    getAllOwnedRoom: builder.query({
+      query: (userUuid) => `/api/setting/room/owned/${userUuid}`,
+      providesTags: ['AllOwnedRoom'],
+    }),
     getSetting: builder.query({
       query: (roomUuid) => ({
         url: '/api/setting',
@@ -90,14 +94,6 @@ export const apiSlice = createApi({
       transformResponse: (response) => response.map((res) => ({ id: nanoid(), ...res })),
       providesTags: ['Participate'],
     }),
-    updateParticipate: builder.mutation({
-      query: (updates) => ({
-        url: `/api/participate/${updates.roomUuid}`,
-        method: 'PATCH',
-        body: updates,
-      }),
-      invalidatesTags: ['Participate'],
-    }),
   }),
 });
 
@@ -107,6 +103,7 @@ export const {
   useSignInUserMutation,
   useLogOutUserMutation,
   useGetAllActiveRoomQuery,
+  useLazyGetAllOwnedRoomQuery,
   useGetSettingQuery,
   useCreateSettingMutation,
   useUpdateSettingMutation,
@@ -116,5 +113,4 @@ export const {
   useGetPreviousDrawLogQuery,
   useLazyGetPreviousDrawLogQuery,
   useGetAllParticipateQuery,
-  useUpdateParticipateMutation,
 } = apiSlice;
