@@ -3,12 +3,16 @@ import { createSlice } from '@reduxjs/toolkit';
 export const toolBoxSlice = createSlice({
   name: 'toolBox',
   initialState: {
-    colorCode: '#000000',
+    currentColor: '#000000',
+    freeColor: '#000000',
     penSize: 3,
   },
   reducers: {
-    changeColor: (state, action) => {
-      return { ...state, colorCode: action.payload };
+    changeCurrentColor: (state, action) => {
+      return { ...state, currentColor: action.payload };
+    },
+    changeFreeColor: (state, action) => {
+      return { ...state, freeColor: action.payload };
     },
     changePenSize: (state, action) => {
       return { ...state, penSize: action.payload };
