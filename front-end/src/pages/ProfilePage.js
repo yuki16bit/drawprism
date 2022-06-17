@@ -9,14 +9,7 @@ import RoomThumbnail from '../components/RoomThumbnail';
 const ProfilePage = ({ user }) => {
   const navigate = useNavigate();
 
-  const [
-    getAllOwnedRoom,
-    {
-      data: allOwnedRoom,
-      isLoading: isLazyGetAllOwnedRoomLoading,
-      isSuccess: isLazyGetAllOwnedRoomSuccess,
-    },
-  ] = useLazyGetAllOwnedRoomQuery();
+  const [getAllOwnedRoom, { data: allOwnedRoom }] = useLazyGetAllOwnedRoomQuery();
 
   useEffect(() => {
     if (user?.isAnonymous) {
@@ -51,7 +44,7 @@ const ProfilePage = ({ user }) => {
                     roomUuid={ownedRoom.room_uuid}
                     roomIndex={`${index + 1}`}
                     roomName={ownedRoom.room_name}
-                    thumbnail={ownedRoom.draw_log}
+                    thumbnail={ownedRoom.draw_log !== '' ? ownedRoom.draw_log : undefined}
                   />
                 ))
               ) : (

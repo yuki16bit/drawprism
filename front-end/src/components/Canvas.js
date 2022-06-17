@@ -170,7 +170,9 @@ const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
         ref={canvasRef}
         width={width}
         height={height}
-        className='bg-netural-50 relative top-[40px] left-[310px] m-0 touch-none border'
+        className={`bg-netural-50 relative top-[40px] left-[310px] m-0 touch-none border ${
+          locationState?.mode === 'viewer' ? 'pointer-events-none' : null
+        }`}
         onPointerDown={(e) => down(e)}
         onPointerMove={(e) => throttle(move(e), 10)}
         onPointerUp={(e) => throttle(up(e), 10)}
