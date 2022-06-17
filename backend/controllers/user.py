@@ -20,7 +20,12 @@ class Api_User(MethodView):
       if jwt_cookie and verify_jwt_token(jwt_cookie) is not None:
         user = verify_jwt_token(jwt_cookie)
         new_user = False
-      res = make_response(jsonify({'uuid': user['uuid'], 'name': user['name'], 'isAnonymous': user['is_anonymous']}))
+      res = make_response(jsonify({
+          'uuid': user['uuid'],
+          'name': user['name'],
+          'isAnonymous': user['is_anonymous'],
+          'email': user['email'] if 'email' in user else None
+      }))
       if new_user:
         new_jwt = generate_jwt_token(user['uuid'], user['name'])
         res.set_cookie(
@@ -91,10 +96,8 @@ class Api_User(MethodView):
         elif not verify_password(hash_password(password), password) or member is None:
           raise TypeError('Sign in failed: Wrong email or password.')
         else:
-          res = make_response(
-              jsonify({'uuid': member['uuid'], 'name': member['name'], 'isAnonymous': False})
-          )
-          renew_jwt = generate_jwt_token(member['uuid'], member['name'], False)
+          res = make_response(jsonify({'ok': True}))
+          renew_jwt = generate_jwt_token(member['uuid'], member['name'], member['email'], False)
           res.set_cookie(
               'jwt',
               value=renew_jwt,
