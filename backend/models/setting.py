@@ -72,3 +72,4 @@ def remove_room(room_uuid):
   db.room_participates.delete_one({'room_uuid': room_uuid})
   db.room_screen_shots.delete_one({'room_uuid': room_uuid})
   db.room_chat_logs.delete_one({'room_uuid': room_uuid})
+  db.room_draw_logs.delete_one({'room_uuid': room_uuid})
