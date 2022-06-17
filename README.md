@@ -12,7 +12,7 @@
 ### Live Demo
 
 - Home page: https://www.drawprism.space/
-- Anonymously, no need to register, but you still can register as a member if you'd like to ✨
+- Anonymously, no registration needed but still can sign up if you'd like to. ✨
 - Here I also provide a test account for you guys.
   - ID: test@user.com
   - Password: Qwert123
@@ -56,66 +56,38 @@
 
 ### Backend Tech Stack <a name="backend-tech-stack"></a>
 
-#### Deployment
-
 - Docker / docker-compose
 - gunicorn
 - gevent / gevent-websocket
-
-#### Environment
-
 - Python / Flask
 - Flask-SocketIO
 - Celery
-- Ubuntu 20.04 (Windows Subsystem for Linux 2)
-
-#### Database
-
 - MongoDB Atlas
 - Redis Enterprise Cloud
-
-#### AWS Cloud Service (AWS)
-
-- S3
-- CloudFront
-- EC2
-
-#### Authentication
-
+- AWS S3
+- AWS CloudFront
+- AWS EC2
 - JSON Web Token (JWT)
-
-#### Design Pattern
-
-- MVC
+- MVC Design Pattern
+- Ubuntu 20.04 (Windows Subsystem for Linux 2)
 
 ### Front-End Tech Stack <a name="front-end-tech-stack"></a>
-
-#### JavaScript
 
 - React.js (Hooks)
 - React Router
 - Redux Toolkit
 - Socket.IO Client
 - Canvas API
-
-#### CSS
-
 - Tailwind CSS
-
-#### AJAX
-
 - Redux Toolkit Query
 
 ### Net-working <a name="net-working"></a>
 
-#### Nginx
-
-- Http & Https support
+- Nginx (Reverse Proxy / Http & Https support)
 
 ### Version Control <a name="version-control"></a>
 
-#### Git / Github
-
+- Git / Github
 - GUI: Fork / Git Kraken
 
 ### Contact <a name="contact"></a>
