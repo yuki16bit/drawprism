@@ -7,7 +7,7 @@ import DotsLoader from './DotsLoader';
 const Canvas = ({ locationState, width = 2000, height = 2000 }) => {
   const dispatch = useDispatch();
   const drawingData = useSelector((state) => state.socketIo.drawingData);
-  const currentColor = useSelector((state) => state.toolBox.colorCode);
+  const currentColor = useSelector((state) => state.toolBox.currentColor);
   const currentPenSize = useSelector((state) => state.toolBox.penSize);
 
   const [

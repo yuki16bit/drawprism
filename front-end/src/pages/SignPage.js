@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSignUpUserMutation, useSignInUserMutation } from '../features/apiSlice';
 import useQueryString from '../custom-hooks/useQueryString';
-import { FiTwitter } from 'react-icons/fi';
 import Container from '../components/Container';
-import Divider from '../components/Divider';
 
 const SignPage = () => {
-  let queryString = useQueryString();
+  const navigate = useNavigate();
+  const queryString = useQueryString();
   const [signMode, setSignMode] = useState('up');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [signUpUser] = useSignUpUserMutation();
-  const [signInUser] = useSignInUserMutation();
+  const [signUpUser, { isSuccess: isSignUpSuccess }] = useSignUpUserMutation();
+  const [signInUser, { isSuccess: isSignInSuccess }] = useSignInUserMutation();
   const signUser = (e) => {
     e.preventDefault();
     if (signMode === 'up') {
@@ -30,6 +30,22 @@ const SignPage = () => {
   useEffect(() => {
     queryString.get('mode') ? setSignMode(queryString.get('mode')) : setSignMode('up');
   }, [queryString]);
+
+  useEffect(() => {
+    if (signMode === 'in') {
+      setEmail('test@user.com');
+      setPassword('Qwert123');
+    } else {
+      setEmail('');
+      setPassword('');
+    }
+  }, [signMode]);
+
+  useEffect(() => {
+    if (isSignInSuccess || isSignUpSuccess) {
+      navigate('/profile', { replace: true });
+    }
+  }, [isSignUpSuccess, isSignInSuccess, navigate]);
 
   return (
     <Container>
@@ -84,11 +100,6 @@ const SignPage = () => {
             {signMode === 'in' && 'Sign in'}
           </button>
         </form>
-        <Divider message='OR' wrapClassName='relative flex items-center py-6' />
-        <button className='mb-6 block flex w-full items-center justify-center gap-2 rounded bg-sky-500 py-2 text-white transition hover:bg-sky-600/80'>
-          <FiTwitter />
-          Continue with Twitter
-        </button>
       </div>
     </Container>
   );

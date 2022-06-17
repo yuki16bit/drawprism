@@ -1,7 +1,7 @@
 from flask import Blueprint, abort, jsonify, make_response, request
 from flask.views import MethodView
 from flask_cors import CORS
-from models.setting import generate_room, add_room, query_room_uuid, query_screen_shots, query_all_active_room, remove_room, update_room
+from models.setting import generate_room, add_room, query_room_uuid, query_screen_shots, query_all_active_room, remove_room, update_room, query_all_owned_room
 from utils.abort_msg import generate_abort_msg
 from utils.string_convertor import to_snake_case
 import os
@@ -89,6 +89,20 @@ def get_all_active_room():
   try:
     all_active_room = query_all_active_room()
     return make_response(jsonify(all_active_room))
+  except Exception as e:
+    abort(500, description=generate_abort_msg(e))
+
+
+@bp_c_setting.route('/setting/room/owned/<user_uuid>', methods=['GET'])
+def get_all_owned_room(user_uuid):
+  try:
+    if user_uuid:
+      all_owned_room = query_all_owned_room(user_uuid)
+      return make_response(jsonify(all_owned_room))
+    else:
+      raise TypeError('Get all owned room failed: Must provide user uuid.')
+  except TypeError as e:
+    abort(400, description=generate_abort_msg(e))
   except Exception as e:
     abort(500, description=generate_abort_msg(e))
 

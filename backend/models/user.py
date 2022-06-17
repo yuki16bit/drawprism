@@ -43,13 +43,15 @@ def verify_jwt_token(token):
     return
 
 
-def generate_jwt_token(uuid, name, is_anonymous=True):
+def generate_jwt_token(uuid, name, email=None, is_anonymous=True):
   payload = {
       'uuid': uuid,
       'name': name,
       'is_anonymous': is_anonymous,
       'exp': datetime.utcnow() + timedelta(days=90)
   }
+  if email is not None:
+    payload['email'] = email
   return jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm=current_app.config['JWT_ALG'])
 
 
