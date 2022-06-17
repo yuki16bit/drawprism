@@ -20,7 +20,7 @@ const Layout = () => {
   const dispatch = useDispatch();
   const isConnected = useSelector((state) => state.socketIo.isConnected);
 
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const isRoomPath = matchPath('/room', pathname);
 
   const {
@@ -55,12 +55,24 @@ const Layout = () => {
                 <li>DrawPrism</li>
               </ExternalLink>
             </div>
-            <li className='mr-1 underline'>Room Info</li>
+            <li className='mr-1'>{`Room Url : ${
+              process.env.REACT_APP_ENV !== 'production'
+                ? `http://127.0.0.1:3000/room/${state?.roomUuid}`
+                : `https://drawprism.space/room/${state?.roomUuid}`
+            }`}</li>
           </ul>
         ) : (
           <>
             <h2 className='fixed top-[25px] left-[32px] z-20 text-2xl font-medium '>
-              <Link to='/'>Home</Link>
+              <Link to='/'>
+                <div className='flex h-8 gap-3'>
+                  <img
+                    src={`${process.env.PUBLIC_URL + '/images/logo-drawprism.png'}`}
+                    alt='logo-drawprism'
+                  ></img>
+                  Home
+                </div>
+              </Link>
             </h2>
             <ul className='ml-auto mr-[25px] flex h-[4.75rem] w-fit items-center gap-6'>
               <li className='mt-4 font-medium tracking-wide text-neutral-600'>
@@ -132,10 +144,12 @@ const Layout = () => {
             <h5 className='font-mediu m  text-center'>Web Developer who built this website.</h5>
             <ul className='my-10 flex items-center justify-center gap-16'>
               <li className='rounded-full bg-stone-800 p-2'>
-                <FiLinkedin size='1.5rem' className='stroke-[1.5] text-white' />
+                <a target='_blank' href='https://www.linkedin.com/in/juri-liao/' rel='noreferrer'>
+                  <FiLinkedin size='1.5rem' className='stroke-[1.5] text-white' />
+                </a>
               </li>
               <li className='rounded-full bg-stone-800 p-2'>
-                <a target='_blank' href='https://github.com/kyo144' rel='noreferrer'>
+                <a target='_blank' href='https://github.com/kyo144/drawprism' rel='noreferrer'>
                   <FiGithub size='1.5rem' className='stroke-[1.5] text-white' />
                 </a>
               </li>
