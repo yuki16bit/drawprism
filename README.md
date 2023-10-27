@@ -8,7 +8,7 @@
 </div>
 
 #### Live Demo
-- The website is currently down for cost-saving purposes, so there is no live demo available now
+- This repository is no longer maintained. The live demo is available only as a screenshot 🖼
 - Anonymously, no registration needed but still can sign up if you'd like to ✨
 - Here I also provide a test account for you guys
   - ID: test@user.com
