@@ -1,6 +1,6 @@
 #### DrawPrism
 <div align="center">
-  <img src="https://github.com/yuzunekoayu/drawprism/assets/45845170/02c2772d-71b3-45cc-b6d4-7f16efe757a9" alt="drawprism-logo"/>
+  <img src="https://github.com/yuki16bit/drawprism/assets/45845170/02c2772d-71b3-45cc-b6d4-7f16efe757a9" alt="drawprism-logo"/>
 </div>
 <br />
 <div align="center">
@@ -10,28 +10,27 @@
 #### Live Demo
 - This repository is no longer maintained. The live demo is available only as a screenshot 🖼
 - Anonymously, no registration needed but still can sign up if you'd like to ✨
-- Here I also provide a test account for you guys
-  - ID: test@user.com
-  - Password: Qwert123
+<div align="center">
+  <img src="https://github.com/yuki16bit/drawprism/assets/45845170/457301b3-6024-437c-bace-5007f680c0bc" alt="drawprism-gif"/>
+</div>
 
 #### Main Features
 ##### ✨ Create a free paint chat room in a second
 - After create the room, system will give you an url to invite your friends in, then you can drawing and chatting together, asynchronously!
 - Communication between client-side and server-side is handled through Socket.IO
-
 <div align="center">
-  <img src="https://images.plurk.com/2Hj504MVQaoTw15gCUEhn8.gif" alt="drawprism-gif"/>
+  <img src="https://github.com/yuki16bit/drawprism/assets/45845170/a74f13eb-50b1-4535-a678-6e7a0dfc1e05" alt="drawprism-paint-chat-gif"/>
 </div>
 
 ##### ✨ Pen Pressure Sensitive
 - If you draw by tablet, I have built-in support for pressure sensitivity!
 <div align="left">
-  <img src="https://images.plurk.com/5DJ9oeugHyOgPTgaB1bG2C.gif" alt="drawprism-gif"/>
+  <img src="https://github.com/yuki16bit/drawprism/assets/45845170/1787da6a-79a1-448f-a749-eb35986a80af" alt="drawprism-pen-pressure-gif"/>
 </div>
 
 #### System Architecture
 <div align="center">
-  <img src="https://images.plurk.com/Gl17kBIGWQFEoZ7Q8Z8Du.png" alt="drawprism-architechure"/>
+  <img src="https://github.com/yuki16bit/drawprism/assets/45845170/f832cd5b-12b8-4d3f-a275-3c214758aa08" alt="drawprism-architechure"/>
 </div>
 
 #### Front-End Tech Stack
